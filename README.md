@@ -1,4 +1,5 @@
 # SecondRead
+
 This repo is inspired by [ProgettoTecWeb21](https://github.com/NicholasPilotto/ProgettoTecWeb21) repo.
 
 ## What SecondRead is?
