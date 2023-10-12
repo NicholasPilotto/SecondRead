@@ -13,3 +13,12 @@ An user can edit its information.
 ## What is the propose of this project?
 
 This project is meant to learn skills and practice with Java language, SpringBoot framework and microservices architecture.
+
+## Server ports
+
+Server ports are configured as follows.
+
+| Service | Port |
+| :--- | :---: |
+| Naming server | 8761 |
+| Gateway server | 8765 |
