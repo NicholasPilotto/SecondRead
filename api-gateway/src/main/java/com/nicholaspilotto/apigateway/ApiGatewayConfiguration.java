@@ -20,7 +20,19 @@ public class ApiGatewayConfiguration {
             .addRequestHeader("MyHeader", "MyUri")
             .addRequestParameter("MyParam", "MyValue")
           )
-          .uri("http://httpbin.org:80");
+          .uri("http://httpbin.org/get");
+      })
+      .route(predicateSpec -> {
+        return predicateSpec.path("/post")
+          .filters(f -> f
+            .addRequestHeader("MyHeader", "MyUri")
+            .addRequestParameter("MyParam", "MyValue")
+          )
+          .uri("http://httpbin.org/post");
+      })
+      .route(predicateSpec -> {
+        return predicateSpec.path("/user/**")
+          .uri("lb://user-service");
       })
       .build();
   }
