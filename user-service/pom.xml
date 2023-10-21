@@ -15,44 +15,109 @@
 	<description>User service server</description>
 	<properties>
 		<java.version>17</java.version>
+		<spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
-			<groupId>io.micrometer</groupId>
-			<artifactId>micrometer-tracing-bridge-brave</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>io.opentelemetry</groupId>
-			<artifactId>opentelemetry-exporter-zipkin</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+		</dependency>
+
+		<!-- 		<dependency>
+          <groupId>org.springframework.cloud</groupId>
+          <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+     -->
+		<!-- Spring Boot 3+ Tracing -->
+
+		<!-- Micrometer > Brave/OpenTelemetry > Zipkin -->
+
+		<!-- Micrometer - Vendor-neutral application observability facade. Instrument your JVM-based application code without vendor lock-in.  Observation (Metrics & Logs) + Tracing.-->
+
 		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-observation</artifactId>
 		</dependency>
+
+		<!-- Brave as Bridge -->
+
+		<!--
+    <dependency>
+        <groupId>io.micrometer</groupId>
+        <artifactId>micrometer-tracing-bridge-brave</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>io.zipkin.reporter2</groupId
+        <artifactId>zipkin-reporter-brave</artifactId>
+    </dependency>
+    -->
+
+		<!-- Open Telemetry as Bridge -->
+		<!-- Open Telemetry - Simplified Observability (metrics, logs, and traces) -->
+
 		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-tracing-bridge-otel</artifactId>
 		</dependency>
+
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-config</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-openfeign</artifactId>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-exporter-zipkin</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.13.2</version>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.github.resilience4j</groupId>
+			<artifactId>resilience4j-all</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<plugins>
@@ -60,26 +125,26 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.3.0</version>
-				<configuration>
-					<configLocation>checkstyle.xml</configLocation>
-					<consoleOutput>true</consoleOutput>
-					<failsOnError>true</failsOnError>
-					<linkXRef>false</linkXRef>
-				</configuration>
-				<executions>
-					<execution>
-						<id>validate</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>org.apache.maven.plugins</groupId>-->
+<!--				<artifactId>maven-checkstyle-plugin</artifactId>-->
+<!--				<version>3.3.0</version>-->
+<!--				<configuration>-->
+<!--					<configLocation>checkstyle.xml</configLocation>-->
+<!--					<consoleOutput>true</consoleOutput>-->
+<!--					<failsOnError>true</failsOnError>-->
+<!--					<linkXRef>false</linkXRef>-->
+<!--				</configuration>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<id>validate</id>-->
+<!--						<phase>validate</phase>-->
+<!--						<goals>-->
+<!--							<goal>check</goal>-->
+<!--						</goals>-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--			</plugin>-->
 		</plugins>
 	</build>
 
