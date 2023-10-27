@@ -18,7 +18,7 @@ public class CustomerUserService implements UserService {
   private UserRepository userRepository;
 
   @Override
-  public String getUser() {
-    return "Kylan Gentry";
+  public User getUser(Long id) {
+    return userRepository.findById(id).orElse(null);
   }
 }
