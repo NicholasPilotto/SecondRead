@@ -23,6 +23,17 @@ public class User {
   private String phoneNumber;
   private String email;
   private String password;
+
+  /**
+   * Class constructor
+   * @param id id of the user.
+   * @param firstName first name of the user.
+   * @param lastName last name of the user.
+   * @param birthDate birthdate of the user.
+   * @param email email of the user.
+   * @param phoneNumber phone number of the user.
+   * @param password password of the user.
+   */
   public User(
     Long id,
     String firstName,
