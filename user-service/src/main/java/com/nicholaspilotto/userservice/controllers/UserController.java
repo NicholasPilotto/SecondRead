@@ -1,15 +1,14 @@
 package com.nicholaspilotto.userservice.controllers;
 
+import com.nicholaspilotto.userservice.models.entities.User;
 import com.nicholaspilotto.userservice.services.CustomerUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Represents a controller class used to interact
@@ -29,11 +28,18 @@ public class UserController {
   private CustomerUserService customerUserService;
 
   /**
-   * Method used to test current controller.
-   * @return response entity with test data.
+   * Method used to get user by ig.
+   * @param id id of the user we are looking for.
+   * @return response entity representing user object if user is found, <code>NOT FOUND</code> otherwise.
    */
-  @GetMapping("/user/test")
-  public ResponseEntity<String> UserTest() {
-    return new ResponseEntity<>(customerUserService.getUser(), HttpStatus.OK);
+  @GetMapping("/user/{id}")
+  public ResponseEntity<User> GetById(@PathVariable Long id) {
+    User user = customerUserService.getUser(id);
+
+    if (user == null) {
+      return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    return new ResponseEntity<>(user, HttpStatus.OK);
   }
 }
