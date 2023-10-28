@@ -6,8 +6,6 @@ import com.nicholaspilotto.userservice.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 /**
  * Represents the customer user service class used to
  * interact with customer user data.
