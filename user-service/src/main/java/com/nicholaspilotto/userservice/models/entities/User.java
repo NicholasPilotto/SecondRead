@@ -3,12 +3,14 @@ package com.nicholaspilotto.userservice.models.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import java.util.Objects;
 
 /**
  * Represents a user object entity.
  */
+@Table(name = "user")
 @Entity
 public class User {
   @Id
