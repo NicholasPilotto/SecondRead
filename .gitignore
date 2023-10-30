@@ -146,4 +146,7 @@ fabric.properties
 # Local History for Visual Studio Code
 .history/
 
+# Environment files
+.env
+
 # End of https://mrkandreev.name/snippets/gitignore-generator/#Java,macOS,Maven,Intellij,VisualStudioCode
