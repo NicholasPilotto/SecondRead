@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 /**
  * Represents a controller class used to interact
  * with user data.
@@ -28,9 +30,19 @@ public class UserController {
   private CustomerUserService customerUserService;
 
   /**
+   * Get the list of all users stored into the database.
+   * @return List of users.
+   */
+  @GetMapping("/user")
+  public ResponseEntity<List<User>> getAllUsers() {
+    List<User> users = customerUserService.getAllUsers();
+    return new ResponseEntity<>(users, HttpStatus.OK);
+  }
+
+  /**
    * Method used to get user by ig.
    * @param id id of the user we are looking for.
-   * @return response entity representing user object if user is found, <code>NOT FOUND</code> otherwise.
+   * @return response entity representing user object if user is found, {@code NOT FOUND} otherwise.
    */
   @GetMapping("/user/{id}")
   public ResponseEntity<User> GetById(@PathVariable Long id) {
