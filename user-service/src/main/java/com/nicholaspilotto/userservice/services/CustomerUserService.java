@@ -6,6 +6,8 @@ import com.nicholaspilotto.userservice.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Represents the customer user service class used to
  * interact with customer user data.
@@ -14,9 +16,14 @@ import org.springframework.stereotype.Service;
 public class CustomerUserService implements UserService {
   @Autowired
   private UserRepository userRepository;
+  @Override
+  public List<User> getAllUsers() {
+    return userRepository.findAll();
+  }
 
   @Override
   public User getUser(Long id) {
     return userRepository.findById(id).orElse(null);
   }
+
 }
