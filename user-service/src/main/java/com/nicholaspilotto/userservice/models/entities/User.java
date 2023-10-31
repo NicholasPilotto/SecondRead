@@ -1,9 +1,6 @@
 package com.nicholaspilotto.userservice.models.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
@@ -14,6 +11,7 @@ import java.util.Objects;
 @Entity
 public class User {
   @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
   @Column(name = "first_name")
   private String firstName;
@@ -25,6 +23,8 @@ public class User {
   private String phoneNumber;
   private String email;
   private String password;
+
+  public User() { }
 
   /**
    * Class constructor
