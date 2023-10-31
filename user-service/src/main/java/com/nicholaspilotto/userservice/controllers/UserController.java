@@ -1,13 +1,14 @@
 package com.nicholaspilotto.userservice.controllers;
 
+import com.nicholaspilotto.userservice.models.dtos.UserCreationDTO;
 import com.nicholaspilotto.userservice.models.entities.User;
 import com.nicholaspilotto.userservice.services.CustomerUserService;
+import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -29,6 +30,9 @@ public class UserController {
   @Autowired
   private CustomerUserService customerUserService;
 
+  @Autowired
+  private ModelMapper mapper;
+
   /**
    * Get the list of all users stored into the database.
    * @return List of users.
@@ -45,7 +49,7 @@ public class UserController {
    * @return response entity representing user object if user is found, {@code NOT FOUND} otherwise.
    */
   @GetMapping("/user/{id}")
-  public ResponseEntity<User> GetById(@PathVariable Long id) {
+  public ResponseEntity<User> getById(@PathVariable Long id) {
     User user = customerUserService.getUser(id);
 
     if (user == null) {
@@ -53,5 +57,17 @@ public class UserController {
     }
 
     return new ResponseEntity<>(user, HttpStatus.OK);
+  }
+
+  /**
+   * Method used to create new user.
+   * @param payload user data to store into the database.
+   * @return Created user object.
+   */
+  @PostMapping("/user")
+  public ResponseEntity<User> create(@Valid @RequestBody UserCreationDTO payload) {
+    User newUser = mapper.map(payload, User.class);
+    newUser = customerUserService.createUser(newUser);
+    return new ResponseEntity<>(newUser, HttpStatus.BAD_REQUEST);
   }
 }
