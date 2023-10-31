@@ -20,4 +20,11 @@ public interface UserService {
    * @return User with {@code id}.
    */
   public abstract User getUser(Long id);
+
+  /**
+   * Create new user.
+   * @param user user to store into the database.
+   * @return Created user object.
+   */
+  public abstract User createUser(User user);
 }
