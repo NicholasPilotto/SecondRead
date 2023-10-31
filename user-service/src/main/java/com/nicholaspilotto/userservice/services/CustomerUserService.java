@@ -26,4 +26,9 @@ public class CustomerUserService implements UserService {
     return userRepository.findById(id).orElse(null);
   }
 
+  @Override
+  public User createUser(User user) {
+    return userRepository.save(user);
+  }
+
 }
