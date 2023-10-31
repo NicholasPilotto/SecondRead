@@ -3,6 +3,7 @@ version: '3.7'
 services:
   db:
     image: mysql
+    container_name: sr_db
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
