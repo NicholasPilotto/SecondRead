@@ -2,6 +2,7 @@ package com.nicholaspilotto.userservice.models.entities;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -18,11 +19,13 @@ public class User {
   @Column(name = "last_name")
   private String lastName;
   @Column(name = "birth_date")
-  private String birthDate;
+  @Temporal(TemporalType.DATE)
+  private Date birthDate;
   @Column(name = "phone_number")
   private String phoneNumber;
   private String email;
   private String password;
+
 
   public User() { }
 
@@ -40,7 +43,7 @@ public class User {
     Long id,
     String firstName,
     String lastName,
-    String birthDate,
+    Date birthDate,
     String email,
     String phoneNumber,
     String password
@@ -98,7 +101,7 @@ public class User {
    * Gets the user birthdate.
    * @return user birthdate.
    */
-  public String getBirthDate() {
+  public Date getBirthDate() {
     return birthDate;
   }
 
@@ -106,7 +109,7 @@ public class User {
    * Sets the birthdate to the user.
    * @param birthDate birthdate to set to the user.
    */
-  public void setBirthDate(String birthDate) {
+  public void setBirthDate(Date birthDate) {
     this.birthDate = birthDate;
   }
 
