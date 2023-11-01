@@ -1,6 +1,7 @@
 package com.nicholaspilotto.userservice.controllers;
 
-import com.nicholaspilotto.userservice.models.dtos.UserCreationDTO;
+import com.nicholaspilotto.userservice.models.dtos.user.UserCreationDTO;
+import com.nicholaspilotto.userservice.models.dtos.user.UserResponseDTO;
 import com.nicholaspilotto.userservice.models.entities.User;
 import com.nicholaspilotto.userservice.services.CustomerUserService;
 import jakarta.validation.Valid;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -38,9 +40,10 @@ public class UserController {
    * @return List of users.
    */
   @GetMapping("/user")
-  public ResponseEntity<List<User>> getAllUsers() {
+  public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
     List<User> users = customerUserService.getAllUsers();
-    return new ResponseEntity<>(users, HttpStatus.OK);
+    List<UserResponseDTO> response = Arrays.stream(mapper.map(users, UserResponseDTO[].class)).toList();
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   /**
@@ -65,9 +68,10 @@ public class UserController {
    * @return Created user object.
    */
   @PostMapping("/user")
-  public ResponseEntity<User> create(@Valid @RequestBody UserCreationDTO payload) {
+  public ResponseEntity<UserResponseDTO> create(@Valid @RequestBody UserCreationDTO payload) {
     User newUser = mapper.map(payload, User.class);
     newUser = customerUserService.createUser(newUser);
-    return new ResponseEntity<>(newUser, HttpStatus.BAD_REQUEST);
+    UserResponseDTO response = mapper.map(newUser, UserResponseDTO.class);
+    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
 }
