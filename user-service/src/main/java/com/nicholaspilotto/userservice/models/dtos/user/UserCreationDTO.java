@@ -1,8 +1,10 @@
-package com.nicholaspilotto.userservice.models.dtos;
+package com.nicholaspilotto.userservice.models.dtos.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+
+import java.util.Date;
 
 /**
  * Represents user data used to create a new user object.
@@ -10,24 +12,24 @@ import jakarta.validation.constraints.Size;
 public class UserCreationDTO {
   @NotEmpty
   @Size(min = 2, max = 200, message = "First name length must be between 2 and 200")
-  public String firstName;
+  private String firstName;
   @NotEmpty
   @Size(min = 2, max = 200, message = "Last name length must be between 2 and 200")
-  public String lastName;
-  public String birthDate;
+  private String lastName;
+  private Date birthDate;
   @Size(min = 5, max = 15)
-  public String phoneNumber;
+  private String phoneNumber;
   @Email
-  public String email;
+  private String email;
   @Size(min = 4, max = 15, message = "Password length must be between 4 and 15")
-  public String password;
+  private String password;
 
   public UserCreationDTO() { }
 
   public UserCreationDTO(
     String firstName,
     String lastName,
-    String birthDate,
+    Date birthDate,
     String phoneNumber,
     String email,
     String password
@@ -56,11 +58,11 @@ public class UserCreationDTO {
     this.lastName = lastName;
   }
 
-  public String getBirthDate() {
+  public Date getBirthDate() {
     return birthDate;
   }
 
-  public void setBirthDate(String birthDate) {
+  public void setBirthDate(Date birthDate) {
     this.birthDate = birthDate;
   }
 
