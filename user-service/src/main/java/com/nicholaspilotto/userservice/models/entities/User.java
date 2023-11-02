@@ -1,7 +1,10 @@
 package com.nicholaspilotto.userservice.models.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -25,7 +28,12 @@ public class User {
   private String phoneNumber;
   private String email;
   private String password;
-
+  @Column(name = "created_at")
+  @CreationTimestamp
+  private LocalDateTime createdAt;
+  @Column(name = "updated_at")
+  @UpdateTimestamp
+  private LocalDateTime updatedAt;
 
   public User() { }
 
@@ -38,6 +46,8 @@ public class User {
    * @param email email of the user.
    * @param phoneNumber phone number of the user.
    * @param password password of the user.
+   * @param createdAt date of creation.
+   * @param updatedAt last update date.
    */
   public User(
     Long id,
@@ -46,7 +56,9 @@ public class User {
     Date birthDate,
     String email,
     String phoneNumber,
-    String password
+    String password,
+    LocalDateTime createdAt,
+    LocalDateTime updatedAt
   ) {
     this.id = id;
     this.firstName = firstName;
@@ -55,6 +67,8 @@ public class User {
     this.email = email;
     this.phoneNumber = phoneNumber;
     this.password = password;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 
   /**
@@ -162,6 +176,36 @@ public class User {
   }
 
   /**
+   * Gets the creation date of the user.
+   */
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  /**
+   * Sets the creation date of the user.
+   * @param createdAt creation date of the user.
+   */
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  /**
+   * Sets the last update date of the user.
+   */
+  public LocalDateTime getUpdatedAt() {
+    return updatedAt;
+  }
+
+  /**
+   * Sets the last update date of the user.
+   * @param updatedAt last update date of the user.
+   */
+  public void setUpdatedAt(LocalDateTime updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
+  /**
    * Check if two object equals.
    * @param o object to check if is equals to current object.
    * @return true if the two object are equal, false otherwise.
@@ -185,7 +229,7 @@ public class User {
    */
   @Override
   public int hashCode() {
-    return Objects.hash(id, firstName, lastName, birthDate, phoneNumber, email, password);
+    return Objects.hash(id, firstName, lastName, birthDate, phoneNumber, email, password, createdAt, updatedAt);
   }
 
   /**
@@ -202,6 +246,8 @@ public class User {
       ", phoneNumber='" + phoneNumber + '\'' +
       ", email='" + email + '\'' +
       ", password='" + password + '\'' +
+      ", createdAt='" + createdAt + '\'' +
+      ", updatedAt='" + updatedAt + '\'' +
       '}';
   }
 }
