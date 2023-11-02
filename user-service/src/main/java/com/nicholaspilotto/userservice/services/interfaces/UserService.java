@@ -1,8 +1,11 @@
 package com.nicholaspilotto.userservice.services.interfaces;
 
 import com.nicholaspilotto.userservice.models.entities.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents the interface class used to interact with generic user data.
@@ -10,16 +13,17 @@ import java.util.List;
 public interface UserService {
   /**
    * Get the list of all users.
+   * @param pageable Page data.
    * @return List containing all users.
    */
-  public abstract List<User> getAllUsers();
+  public abstract Page<User> getAllUsers(Pageable pageable);
 
   /**
    * Get a specific user by its id.
    * @param id id of the target user.
-   * @return User with {@code id}.
+   * @return {@code Optional<User> } with {@code id}.
    */
-  public abstract User getUser(Long id);
+  public abstract Optional<User> getUser(Long id);
 
   /**
    * Create new user.
@@ -27,4 +31,11 @@ public interface UserService {
    * @return Created user object.
    */
   public abstract User createUser(User user);
+
+  /**
+   * Calculate the count of the users stored into
+   * the database.
+   * @return Number of user store into the database.
+   */
+  public abstract long count();
 }
