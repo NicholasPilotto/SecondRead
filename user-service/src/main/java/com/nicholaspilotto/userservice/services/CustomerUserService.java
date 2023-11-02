@@ -4,9 +4,11 @@ import com.nicholaspilotto.userservice.models.entities.User;
 import com.nicholaspilotto.userservice.repositories.UserRepository;
 import com.nicholaspilotto.userservice.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents the customer user service class used to
@@ -16,14 +18,14 @@ import java.util.List;
 public class CustomerUserService implements UserService {
   @Autowired
   private UserRepository userRepository;
-  @Override
-  public List<User> getAllUsers() {
-    return userRepository.findAll();
-  }
 
   @Override
-  public User getUser(Long id) {
-    return userRepository.findById(id).orElse(null);
+  public Page<User> getAllUsers(Pageable pageable) {
+    return userRepository.findAll(pageable);
+  }
+  @Override
+  public Optional<User> getUser(Long id) {
+    return userRepository.findById(id);
   }
 
   @Override
@@ -31,4 +33,8 @@ public class CustomerUserService implements UserService {
     return userRepository.save(user);
   }
 
+  @Override
+  public long count() {
+    return userRepository.count();
+  }
 }
