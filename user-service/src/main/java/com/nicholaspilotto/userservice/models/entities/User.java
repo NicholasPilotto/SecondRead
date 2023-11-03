@@ -1,6 +1,8 @@
 package com.nicholaspilotto.userservice.models.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -26,7 +28,10 @@ public class User {
   private Date birthDate;
   @Column(name = "phone_number")
   private String phoneNumber;
+
   private String email;
+  @NotNull
+  @Size(min = 32, max = 32)
   private String password;
   @Column(name = "created_at")
   @CreationTimestamp
