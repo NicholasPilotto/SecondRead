@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,6 +46,29 @@ public class UserController {
   ) {
     this.customerUserService = customerUserService;
     this.mapper = mapper;
+  }
+
+  /**
+   * Calculate the hash of a string using MD5 algorithm.
+   * @param input string of which to compute hash.
+   * @return String representing MD5 hash of the input.
+   * @throws NoSuchAlgorithmException if MD5 algorithm cannot be found.
+   */
+  private static String hashMD5(String input) throws NoSuchAlgorithmException {
+      MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+      messageDigest.reset();
+      messageDigest.update(input.getBytes());
+      byte[] digest = messageDigest.digest();
+
+      // Convert byte array into sign-um representation
+      BigInteger integerRepresentation = new BigInteger(1, digest);
+
+      // Convert message digest into hex value
+      String output = integerRepresentation.toString(16);
+      while (output.length() < 32) {
+        output = "0%s".formatted(output);
+      }
+      return output;
   }
 
   /**
@@ -86,7 +112,8 @@ public class UserController {
       return new ResponseEntity<>("User with provided id does not exist.", HttpStatus.NOT_FOUND);
     }
 
-    return new ResponseEntity<>(user, HttpStatus.OK);
+    UserResponseDTO response = mapper.map(user, UserResponseDTO.class);
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   /**
@@ -95,10 +122,19 @@ public class UserController {
    * @return Created user object.
    */
   @PostMapping()
-  public ResponseEntity<UserResponseDTO> create(@Valid @RequestBody UserCreationDTO payload) {
-    User newUser = mapper.map(payload, User.class);
-    newUser = customerUserService.createUser(newUser);
-    UserResponseDTO response = mapper.map(newUser, UserResponseDTO.class);
-    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+  public ResponseEntity<?> create(@Valid @RequestBody UserCreationDTO payload) {
+    try {
+      payload.setPassword(hashMD5(payload.getPassword()));
+      User newUser = mapper.map(payload, User.class);
+      newUser = customerUserService.createUser(newUser);
+      UserResponseDTO response = mapper.map(newUser, UserResponseDTO.class);
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    } catch (NoSuchAlgorithmException exception) {
+      return new ResponseEntity<>(
+        "Cannot save user due to internal error",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+
   }
 }
