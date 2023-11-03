@@ -2,6 +2,7 @@ package com.nicholaspilotto.userservice.controllers;
 
 import com.nicholaspilotto.userservice.models.dtos.user.UserCreationDTO;
 import com.nicholaspilotto.userservice.models.dtos.user.UserResponseDTO;
+import com.nicholaspilotto.userservice.models.dtos.user.UserUpdateDTO;
 import com.nicholaspilotto.userservice.models.entities.User;
 import com.nicholaspilotto.userservice.services.CustomerUserService;
 import jakarta.validation.Valid;
@@ -119,6 +120,7 @@ public class UserController {
   /**
    * Method used to create new user.
    * @param payload user data to store into the database.
+   * See {@link com.nicholaspilotto.userservice.models.dtos.user.UserCreationDTO}
    * @return Created user object.
    */
   @PostMapping()
@@ -135,6 +137,33 @@ public class UserController {
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
+  }
 
+  /**
+   * Update existing user.
+   * @param id id of the user that needs to be updated.
+   * @param payload New user data.
+   * See {@link com.nicholaspilotto.userservice.models.dtos.user.UserUpdateDTO}
+   * @return Updated user data.
+   */
+  @PatchMapping("/{id}")
+  public ResponseEntity<?> update(
+    @PathVariable Long id,
+    @RequestBody UserUpdateDTO payload
+  ) {
+    User existing = customerUserService.getUser(id).orElse(null);
+
+    if (existing == null) {
+      return new ResponseEntity<>(
+        "User with provided ID does not exist",
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    existing = payload.overwrite(existing);
+
+    existing = customerUserService.update(existing);
+    UserResponseDTO response = mapper.map(existing, UserResponseDTO.class);
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 }
