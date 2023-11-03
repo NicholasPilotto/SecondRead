@@ -38,4 +38,11 @@ public interface UserService {
    * @return Number of user store into the database.
    */
   public abstract long count();
+
+  /**
+   * Update user data.
+   * @param existing User to update.
+   * @return Updated User data.
+   */
+  public abstract User update(User existing);
 }

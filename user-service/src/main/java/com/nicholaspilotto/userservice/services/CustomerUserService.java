@@ -37,4 +37,9 @@ public class CustomerUserService implements UserService {
   public long count() {
     return userRepository.count();
   }
+
+  @Override
+  public User update(User existing) {
+    return userRepository.save(existing);
+  }
 }
