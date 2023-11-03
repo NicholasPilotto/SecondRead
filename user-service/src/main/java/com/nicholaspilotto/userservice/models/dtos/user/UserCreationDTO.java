@@ -1,9 +1,6 @@
 package com.nicholaspilotto.userservice.models.dtos.user;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.util.Date;
 
@@ -17,7 +14,7 @@ public class UserCreationDTO {
   @NotEmpty
   @Size(min = 2, max = 200, message = "Last name length must be between 2 and 200")
   private String lastName;
-  @NotEmpty
+  @NotNull
   private Date birthDate;
   @Size(min = 5, max = 15)
   private String phoneNumber;
