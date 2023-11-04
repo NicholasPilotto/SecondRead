@@ -5,6 +5,7 @@ import com.nicholaspilotto.userservice.models.dtos.user.UserResponseDTO;
 import com.nicholaspilotto.userservice.models.dtos.user.UserUpdateDTO;
 import com.nicholaspilotto.userservice.models.entities.User;
 import com.nicholaspilotto.userservice.services.CustomerUserService;
+import com.nicholaspilotto.userservice.utilities.Utility;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -47,29 +47,6 @@ public class UserController {
   ) {
     this.customerUserService = customerUserService;
     this.mapper = mapper;
-  }
-
-  /**
-   * Calculate the hash of a string using MD5 algorithm.
-   * @param input string of which to compute hash.
-   * @return String representing MD5 hash of the input.
-   * @throws NoSuchAlgorithmException if MD5 algorithm cannot be found.
-   */
-  private static String hashMD5(String input) throws NoSuchAlgorithmException {
-      MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-      messageDigest.reset();
-      messageDigest.update(input.getBytes());
-      byte[] digest = messageDigest.digest();
-
-      // Convert byte array into sign-um representation
-      BigInteger integerRepresentation = new BigInteger(1, digest);
-
-      // Convert message digest into hex value
-      String output = integerRepresentation.toString(16);
-      while (output.length() < 32) {
-        output = "0%s".formatted(output);
-      }
-      return output;
   }
 
   /**
@@ -107,7 +84,8 @@ public class UserController {
    */
   @GetMapping("/{id}")
   public ResponseEntity<?> getById(@PathVariable Long id) {
-    User user = customerUserService.getUser(id).orElse(null);
+    User user = customerUserService.getUser(id)
+                                   .orElse(null);
 
     if (user == null) {
       return new ResponseEntity<>("User with provided id does not exist.", HttpStatus.NOT_FOUND);
@@ -126,7 +104,7 @@ public class UserController {
   @PostMapping()
   public ResponseEntity<?> create(@Valid @RequestBody UserCreationDTO payload) {
     try {
-      payload.setPassword(hashMD5(payload.getPassword()));
+      payload.setPassword(Utility.hashMD5(payload.getPassword()));
       User newUser = mapper.map(payload, User.class);
       newUser = customerUserService.createUser(newUser);
       UserResponseDTO response = mapper.map(newUser, UserResponseDTO.class);
@@ -165,5 +143,17 @@ public class UserController {
     existing = customerUserService.update(existing);
     UserResponseDTO response = mapper.map(existing, UserResponseDTO.class);
     return new ResponseEntity<>(response, HttpStatus.OK);
+  }
+
+  @PostMapping("/generate-fake-data/{number}")
+  public ResponseEntity<?> generateFakeData(@PathVariable int number) {
+    List<User> fakeUsers = Utility.generateFakeUsers(number);
+    List<User> result = new ArrayList<>();
+
+    for (User fakeUser : fakeUsers) {
+      result.add(customerUserService.createUser(fakeUser));
+    }
+
+    return new ResponseEntity<>(result, HttpStatus.OK);
   }
 }
