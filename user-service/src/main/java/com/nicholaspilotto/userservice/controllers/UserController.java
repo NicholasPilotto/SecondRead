@@ -56,8 +56,6 @@ public class UserController {
    */
   @GetMapping()
   public ResponseEntity<?> getAllUsers(final Pageable pageable) {
-//    Pageable pageable = PageRequest.of(page, size);
-
     List<User> users = customerUserService.getAllUsers(pageable).getContent();
     List<UserResponseDTO> response = Arrays.stream(mapper.map(users, UserResponseDTO[].class)).toList();
     return new ResponseEntity<>(response, HttpStatus.OK);
