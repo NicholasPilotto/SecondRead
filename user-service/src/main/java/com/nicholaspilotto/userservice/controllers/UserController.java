@@ -51,16 +51,12 @@ public class UserController {
 
   /**
    * Get the list of all users stored into the database.
-   * @param page number of the desired page. Default value is 0.
-   * @param size number of elements in the page. Default value is 20.
+   * @param pageable pageable filters.
    * @return List of users.
    */
   @GetMapping()
-  public ResponseEntity<?> getAllUsers(
-    @RequestParam(defaultValue = "0") int page,
-    @RequestParam(defaultValue = "20") int size
-  ) {
-    Pageable pageable = PageRequest.of(page, size);
+  public ResponseEntity<?> getAllUsers(final Pageable pageable) {
+//    Pageable pageable = PageRequest.of(page, size);
 
     List<User> users = customerUserService.getAllUsers(pageable).getContent();
     List<UserResponseDTO> response = Arrays.stream(mapper.map(users, UserResponseDTO[].class)).toList();
