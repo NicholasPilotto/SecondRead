@@ -6,14 +6,6 @@ import com.nicholaspilotto.userservice.models.entities.User;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.*;
 
 public final class Utility {
@@ -47,21 +39,26 @@ public final class Utility {
     Faker faker = new Faker(Locale.ITALIAN);
 
     for (int i = 0; i < number; ++i) {
-      User user = new User();
-      SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-      user.setFirstName(faker.name().firstName());
-      user.setLastName(faker.name().lastName());
-      user.setPhoneNumber(faker.phoneNumber().cellPhone());
-      String email = user.getFirstName() + "." + user.getLastName() + "." + i + "@test.com";
-      user.setEmail(email);
       try {
+        User user = new User();
+        user.setFirstName(faker.name().firstName());
+        user.setLastName(faker.name().lastName());
+        user.setPhoneNumber(faker.phoneNumber().cellPhone());
+
+        String email = "%s.%s.%d@test.com".formatted(
+          user.getFirstName().toLowerCase(),
+          user.getLastName().toLowerCase(),
+          i
+        );
+
+        user.setEmail(email);
         user.setPassword(hashMD5(faker.internet().password()));
+        user.setBirthDate(faker.date().birthday(18, 70));
+        result.add(user);
       } catch (NoSuchAlgorithmException exception) {
         return result;
       }
-      user.setBirthDate(faker.date().birthday(18, 70));
 
-      result.add(user);
     }
     return result;
   }
