@@ -8,18 +8,25 @@ import com.nicholaspilotto.userservice.services.CustomerUserService;
 import com.nicholaspilotto.userservice.utilities.Utility;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Represents a controller class used to interact
@@ -41,6 +48,8 @@ public class UserController {
    */
   private final ModelMapper mapper;
 
+  Logger logger = LoggerFactory.getLogger(UserController.class);
+
   @Autowired
   public UserController(
     CustomerUserService customerUserService,
@@ -52,6 +61,7 @@ public class UserController {
 
   /**
    * Get the list of all users stored into the database.
+   *
    * @param pageable pageable filters.
    * @return List of users.
    */
@@ -59,21 +69,25 @@ public class UserController {
   public ResponseEntity<?> getAllUsers(final Pageable pageable) {
     List<User> users = customerUserService.getAllUsers(pageable).getContent();
     List<UserResponseDTO> response = Arrays.stream(mapper.map(users, UserResponseDTO[].class)).toList();
+    logger.info("Users has been requested.");
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   /**
    * Get the number of user store into the database.
+   *
    * @return Number of user store into the database.
    */
- @GetMapping("/count")
- public ResponseEntity<Long> count() {
-    Long count = customerUserService.count();
-    return new ResponseEntity<>(count, HttpStatus.OK);
- }
+   @GetMapping("/count")
+   public ResponseEntity<Long> count() {
+      Long count = customerUserService.count();
+      logger.info("Count has been request. The result is: %s".formatted(count));
+      return new ResponseEntity<>(count, HttpStatus.OK);
+   }
 
   /**
    * Method used to get user by ig.
+   *
    * @param id id of the user we are looking for.
    * @return response entity representing user object if user is found, {@code NOT FOUND} otherwise.
    */
@@ -83,15 +97,18 @@ public class UserController {
                                    .orElse(null);
 
     if (user == null) {
+      logger.warn("User with id %s has not been found".formatted(id));
       return new ResponseEntity<>("User with provided id does not exist.", HttpStatus.NOT_FOUND);
     }
 
+    logger.info("User with id %s has been found.".formatted(id));
     UserResponseDTO response = mapper.map(user, UserResponseDTO.class);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   /**
    * Method used to create new user.
+   *
    * @param payload user data to store into the database.
    * See {@link com.nicholaspilotto.userservice.models.dtos.user.UserCreationDTO}
    * @return Created user object.
@@ -103,8 +120,10 @@ public class UserController {
       User newUser = mapper.map(payload, User.class);
       newUser = customerUserService.createUser(newUser);
       UserResponseDTO response = mapper.map(newUser, UserResponseDTO.class);
+      logger.info("User with id %s has been created.".formatted(newUser.getId()));
       return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     } catch (NoSuchAlgorithmException exception) {
+      logger.error("Cannot find MD5 algorithm");
       return new ResponseEntity<>(
         "Cannot save user due to internal error",
         HttpStatus.INTERNAL_SERVER_ERROR
@@ -114,6 +133,7 @@ public class UserController {
 
   /**
    * Update existing user.
+   *
    * @param id id of the user that needs to be updated.
    * @param payload New user data.
    * See {@link com.nicholaspilotto.userservice.models.dtos.user.UserUpdateDTO}
@@ -127,6 +147,7 @@ public class UserController {
     User existing = customerUserService.getUserById(id).orElse(null);
 
     if (existing == null) {
+      logger.warn("User with id %s does not exist. Cannot update it.".formatted(id));
       return new ResponseEntity<>(
         "User with provided ID does not exist",
         HttpStatus.BAD_REQUEST
@@ -137,11 +158,15 @@ public class UserController {
 
     existing = customerUserService.update(existing);
     UserResponseDTO response = mapper.map(existing, UserResponseDTO.class);
+
+    logger.info("User with id %s has been updated".formatted(id));
+
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   /**
    * Generate fake user data and store the into the database.
+   *
    * @param number number of fake user to generate.
    * @return The list of fake user generated.
    */
@@ -154,11 +179,13 @@ public class UserController {
       result.add(customerUserService.createUser(fakeUser));
     }
 
+    logger.info("%s fake users have been created".formatted(number));
     return new ResponseEntity<>(result, HttpStatus.OK);
   }
 
   /**
    * Method to delete user data from the database.
+   *
    * @param id ID of the target user.
    * @return Result of the operation.
    */
@@ -167,9 +194,11 @@ public class UserController {
     User existing = customerUserService.getUserById(id).orElse(null);
 
     if (existing == null) {
+      logger.warn("User with id %s does not exist. Cannot delete it,".formatted(id));
       return new ResponseEntity<>("User with provided ID does not exist", HttpStatus.BAD_REQUEST);
     }
 
+    logger.info("User with id %s has been successfully removed".formatted(id));
     return new ResponseEntity<>("User has been deleted successfully", HttpStatus.OK);
   }
 }
