@@ -23,7 +23,7 @@ public interface UserService {
    * @param id id of the target user.
    * @return {@code Optional<User> } with {@code id}.
    */
-  public abstract Optional<User> getUser(Long id);
+  public abstract Optional<User> getUserById(Long id);
 
   /**
    * Create new user.
@@ -45,4 +45,10 @@ public interface UserService {
    * @return Updated User data.
    */
   public abstract User update(User existing);
+
+  /**
+   * Delete user data.
+   * @param existing User to delete.
+   */
+  public abstract void delete(User existing);
 }

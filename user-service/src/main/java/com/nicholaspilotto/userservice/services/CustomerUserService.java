@@ -24,7 +24,7 @@ public class CustomerUserService implements UserService {
     return userRepository.findAll(pageable);
   }
   @Override
-  public Optional<User> getUser(Long id) {
+  public Optional<User> getUserById(Long id) {
     return userRepository.findById(id);
   }
 
@@ -41,5 +41,10 @@ public class CustomerUserService implements UserService {
   @Override
   public User update(User existing) {
     return userRepository.save(existing);
+  }
+
+  @Override
+  public void delete(User existing) {
+    userRepository.delete(existing);
   }
 }
