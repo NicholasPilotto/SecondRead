@@ -7,6 +7,7 @@ import com.nicholaspilotto.userservice.models.entities.User;
 import com.nicholaspilotto.userservice.services.CustomerUserService;
 import com.nicholaspilotto.userservice.utilities.Utility;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -78,7 +79,7 @@ public class UserController {
    */
   @GetMapping("/{id}")
   public ResponseEntity<?> getById(@PathVariable Long id) {
-    User user = customerUserService.getUser(id)
+    User user = customerUserService.getUserById(id)
                                    .orElse(null);
 
     if (user == null) {
@@ -123,7 +124,7 @@ public class UserController {
     @PathVariable Long id,
     @RequestBody UserUpdateDTO payload
   ) {
-    User existing = customerUserService.getUser(id).orElse(null);
+    User existing = customerUserService.getUserById(id).orElse(null);
 
     if (existing == null) {
       return new ResponseEntity<>(
@@ -139,6 +140,11 @@ public class UserController {
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
+  /**
+   * Generate fake user data and store the into the database.
+   * @param number number of fake user to generate.
+   * @return The list of fake user generated.
+   */
   @PostMapping("/generate-fake-data/{number}")
   public ResponseEntity<?> generateFakeData(@PathVariable int number) {
     List<User> fakeUsers = Utility.generateFakeUsers(number);
@@ -149,5 +155,21 @@ public class UserController {
     }
 
     return new ResponseEntity<>(result, HttpStatus.OK);
+  }
+
+  /**
+   * Method to delete user data from the database.
+   * @param id ID of the target user.
+   * @return Result of the operation.
+   */
+  @DeleteMapping("/{id}")
+  public ResponseEntity<?> delete(@NotNull @PathVariable long id) {
+    User existing = customerUserService.getUserById(id).orElse(null);
+
+    if (existing == null) {
+      return new ResponseEntity<>("User with provided ID does not exist", HttpStatus.BAD_REQUEST);
+    }
+
+    return new ResponseEntity<>("User has been deleted successfully", HttpStatus.OK);
   }
 }
