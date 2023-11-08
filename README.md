@@ -14,6 +14,12 @@ An user can edit its information.
 
 This project is meant to learn skills and practice with Java language, SpringBoot framework and microservices architecture.
 
+## Database schema
+
+A mysql database is used to save the data.
+
+In this case, I chose to use a shared database across all the services.
+
 ## Server ports
 
 Server ports are configured as follows.
