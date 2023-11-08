@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  zipkin-server:
+    image: openzipkin/zipkin:latest
+    container_name: sr-zipkin
+    mem_limit: 300m
+    ports:
+      - 9411:9411
+    restart: no
