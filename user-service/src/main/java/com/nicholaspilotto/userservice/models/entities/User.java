@@ -5,9 +5,14 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -15,7 +20,7 @@ import java.util.Objects;
  */
 @Table(name = "user")
 @Entity
-public class User {
+public class User implements UserDetails {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
@@ -28,11 +33,12 @@ public class User {
   private Date birthDate;
   @Column(name = "phone_number")
   private String phoneNumber;
-
   private String email;
   @NotNull
   @Size(min = 32, max = 32)
   private String password;
+  @Enumerated(EnumType.ORDINAL)
+  Role role;
   @Column(name = "created_at")
   @CreationTimestamp
   private LocalDateTime createdAt;
@@ -51,6 +57,7 @@ public class User {
    * @param email email of the user.
    * @param phoneNumber phone number of the user.
    * @param password password of the user.
+   * @param role role of the user.
    * @param createdAt date of creation.
    * @param updatedAt last update date.
    */
@@ -62,6 +69,7 @@ public class User {
     String email,
     String phoneNumber,
     String password,
+    Role role,
     LocalDateTime createdAt,
     LocalDateTime updatedAt
   ) {
@@ -72,6 +80,7 @@ public class User {
     this.email = email;
     this.phoneNumber = phoneNumber;
     this.password = password;
+    this.role = role;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -181,6 +190,22 @@ public class User {
   }
 
   /**
+   * Gets the role of the user.
+   * @return role of the user.
+   */
+  public Role getRole() {
+    return role;
+  }
+
+  /**
+   * Sets the role to the user.
+   * @param role role of the user.
+   */
+  public void setRole(Role role) {
+    this.role = role;
+  }
+
+  /**
    * Gets the creation date of the user.
    */
   public LocalDateTime getCreatedAt() {
@@ -210,6 +235,36 @@ public class User {
     this.updatedAt = updatedAt;
   }
 
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return List.of(new SimpleGrantedAuthority(role.name()));
+  }
+
+  @Override
+  public String getUsername() {
+    return email;
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
+
   /**
    * Check if two object equals.
    * @param o object to check if is equals to current object.
@@ -234,7 +289,7 @@ public class User {
    */
   @Override
   public int hashCode() {
-    return Objects.hash(id, firstName, lastName, birthDate, phoneNumber, email, password, createdAt, updatedAt);
+    return Objects.hash(id, firstName, lastName, birthDate, phoneNumber, email, password, role, createdAt, updatedAt);
   }
 
   /**
@@ -247,12 +302,13 @@ public class User {
       "id=" + id +
       ", firstName='" + firstName + '\'' +
       ", lastName='" + lastName + '\'' +
-      ", birthDate='" + birthDate + '\'' +
+      ", birthDate=" + birthDate +
       ", phoneNumber='" + phoneNumber + '\'' +
       ", email='" + email + '\'' +
       ", password='" + password + '\'' +
-      ", createdAt='" + createdAt + '\'' +
-      ", updatedAt='" + updatedAt + '\'' +
+      ", role=" + role +
+      ", createdAt=" + createdAt +
+      ", updatedAt=" + updatedAt +
       '}';
   }
 }
