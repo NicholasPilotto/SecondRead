@@ -86,7 +86,7 @@ public class UserController {
    }
 
   /**
-   * Method used to get user by ig.
+   * Method used to get user by id.
    *
    * @param id id of the user we are looking for.
    * @return response entity representing user object if user is found, {@code NOT FOUND} otherwise.
@@ -117,10 +117,20 @@ public class UserController {
   public ResponseEntity<?> create(@Valid @RequestBody UserCreationDTO payload) {
     try {
       payload.setPassword(Utility.hashMD5(payload.getPassword()));
+
+      User checkIfExists = customerUserService.getUserByEmail(payload.getEmail()).orElse(null);
+
+      if (checkIfExists != null) {
+        logger.warn("User with email: %s already exists".formatted(payload.getEmail()));
+        return new ResponseEntity<>("User with this email already exist", HttpStatus.CONFLICT);
+      }
+
       User newUser = mapper.map(payload, User.class);
       newUser = customerUserService.createUser(newUser);
+
       UserResponseDTO response = mapper.map(newUser, UserResponseDTO.class);
       logger.info("User with id %s has been created.".formatted(newUser.getId()));
+
       return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     } catch (NoSuchAlgorithmException exception) {
       logger.error("Cannot find MD5 algorithm");
