@@ -26,6 +26,14 @@ public interface UserService {
   public abstract Optional<User> getUserById(Long id);
 
   /**
+   * Get a specific user by its email address.
+   *
+   * @param email email of the target user.
+   * @return {@code Optional<User>} with {@code email}.
+   */
+  public abstract Optional<User> getUserByEmail(String email);
+
+  /**
    * Create new user.
    * @param user user to store into the database.
    * @return Created user object.

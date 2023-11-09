@@ -29,6 +29,10 @@ public class CustomerUserService implements UserService {
   }
 
   @Override
+  public Optional<User> getUserByEmail(String email) {
+    return userRepository.findByEmail(email);
+  }
+  @Override
   public User createUser(User user) {
     return userRepository.save(user);
   }
