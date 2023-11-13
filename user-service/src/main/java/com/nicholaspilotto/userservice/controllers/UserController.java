@@ -7,6 +7,7 @@ import com.nicholaspilotto.userservice.models.entities.User;
 import com.nicholaspilotto.userservice.services.CustomerUserService;
 import com.nicholaspilotto.userservice.utilities.Utility;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -104,6 +105,20 @@ public class UserController {
     logger.info("User with id %s has been found.".formatted(id));
     UserResponseDTO response = mapper.map(user, UserResponseDTO.class);
     return new ResponseEntity<>(response, HttpStatus.OK);
+  }
+
+  @GetMapping("/email/{email}")
+  public ResponseEntity<?> getByEmail(@PathVariable @Email String email) {
+    User user = customerUserService.getUserByEmail(email).orElse(null);
+
+    if (user == null) {
+      return new ResponseEntity<>("User with provided email does not exist", HttpStatus.NOT_FOUND);
+    }
+
+    logger.info("User with email %s has been found".formatted(email));
+    UserResponseDTO responseDTO = mapper.map(user, UserResponseDTO.class);
+
+    return new ResponseEntity<>(responseDTO, HttpStatus.OK);
   }
 
   /**
