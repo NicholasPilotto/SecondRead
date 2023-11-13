@@ -2,7 +2,11 @@ package com.nicholaspilotto.userservice.models.dtos.user;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.nicholaspilotto.userservice.models.entities.Role;
+import jakarta.persistence.Column;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -16,6 +20,9 @@ public class UserResponseDTO {
   private Date birthDate;
   private String phoneNumber;
   private String email;
+  private Role role;
+  private LocalDateTime createdAt;
+  private LocalDateTime updatedAt;
 
   public UserResponseDTO() { }
 
@@ -25,7 +32,10 @@ public class UserResponseDTO {
     String lastName,
     Date birthDate,
     String phoneNumber,
-    String email
+    String email,
+    Role role,
+    LocalDateTime createdAt,
+    LocalDateTime updatedAt
   ) {
     this.id = id;
     this.firstName = firstName;
@@ -33,6 +43,9 @@ public class UserResponseDTO {
     this.birthDate = birthDate;
     this.phoneNumber = phoneNumber;
     this.email = email;
+    this.role = role;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 
   public Long getId() {
@@ -83,15 +96,42 @@ public class UserResponseDTO {
     this.email = email;
   }
 
+  public Role getRole() {
+    return role;
+  }
+
+  public void setRole(Role role) {
+    this.role = role;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public LocalDateTime getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(LocalDateTime updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
   @Override
   public String toString() {
-    return "UserResponseDto{" +
+    return "UserResponseDTO{" +
       "id=" + id +
       ", firstName='" + firstName + '\'' +
       ", lastName='" + lastName + '\'' +
-      ", birthDate='" + birthDate + '\'' +
+      ", birthDate=" + birthDate +
       ", phoneNumber='" + phoneNumber + '\'' +
       ", email='" + email + '\'' +
+      ", role=" + role +
+      ", createdAt=" + createdAt +
+      ", updatedAt=" + updatedAt +
       '}';
   }
 }
