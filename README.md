@@ -28,5 +28,4 @@ Server ports are configured as follows.
 | :--- | :---: |
 | Naming server | 8761 |
 | Gateway server | 8765 |
-| Authentication service | 8900 |
 | User service | 8800 |
