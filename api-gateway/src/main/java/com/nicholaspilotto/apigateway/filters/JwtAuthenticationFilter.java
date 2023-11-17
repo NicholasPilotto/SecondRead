@@ -1,6 +1,6 @@
 package com.nicholaspilotto.apigateway.filters;
 
-import com.nicholaspilotto.apigateway.services.JwtService;
+import com.nicholaspilotto.apigateway.services.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,13 +19,13 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-  private final JwtService jwtService;
   private final UserDetailsService userDetailsService;
 
-  @Autowired
-  public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService) {
-    this.jwtService = jwtService;
+  private final TokenService tokenService;
+
+  public JwtAuthenticationFilter(UserDetailsService userDetailsService, TokenService tokenService) {
     this.userDetailsService = userDetailsService;
+    this.tokenService = tokenService;
   }
 
   /**
@@ -56,12 +56,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     // get jwt from Bearer authorization header
     jwt = authHeader.substring(bearerSuffix.length());
-    userEmail = jwtService.extractUserEmail(jwt);
+    userEmail = tokenService.extractUserEmail(jwt);
 
     if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
       UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
-      if (jwtService.isTokenValid(jwt, userDetails)) {
+      if (tokenService.isTokenValid(jwt, userDetails)) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
           userDetails,
           null,
