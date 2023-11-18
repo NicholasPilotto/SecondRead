@@ -55,6 +55,14 @@ public interface UserService {
   public abstract User update(User existing);
 
   /**
+   * Get user data for a login purpose.
+   * @param email email of the user.
+   * @param password password of the user.
+   * @return User data.
+   */
+  public abstract Optional<User> login(String email, String password);
+
+  /**
    * Delete user data.
    * @param existing User to delete.
    */
