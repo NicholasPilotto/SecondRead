@@ -4,6 +4,7 @@ import com.nicholaspilotto.apigateway.filters.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -31,7 +32,7 @@ public class SecurityConfiguration {
     httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                   requests -> requests
-                    .requestMatchers("/auth/login").permitAll()
+                    .requestMatchers(HttpMethod.GET,"user/login").permitAll()
                     .requestMatchers("/auth/register").permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
