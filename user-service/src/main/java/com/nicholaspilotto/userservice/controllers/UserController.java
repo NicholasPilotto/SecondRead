@@ -1,5 +1,6 @@
 package com.nicholaspilotto.userservice.controllers;
 
+import com.nicholaspilotto.userservice.models.dtos.user.LoginCredential;
 import com.nicholaspilotto.userservice.models.dtos.user.UserCreationDTO;
 import com.nicholaspilotto.userservice.models.dtos.user.UserResponseDTO;
 import com.nicholaspilotto.userservice.models.dtos.user.UserUpdateDTO;
@@ -119,6 +120,25 @@ public class UserController {
     UserResponseDTO responseDTO = mapper.map(user, UserResponseDTO.class);
 
     return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+  }
+
+  @GetMapping("/login")
+  public ResponseEntity<?> login(@RequestBody @NotNull LoginCredential credential) {
+    try {
+      User user = customerUserService.login(
+          credential.getEmail(),
+          Utility.hashMD5(credential.getPassword())
+      ).orElse(null);
+
+      UserResponseDTO response = mapper.map(user, UserResponseDTO.class);
+      return new ResponseEntity<>(response, HttpStatus.OK);
+    } catch (NoSuchAlgorithmException exception) {
+      logger.error("Cannot find MD5 algorithm");
+      return new ResponseEntity<>(
+        "Cannot save user due to internal error",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
   }
 
   /**
