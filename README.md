@@ -14,6 +14,8 @@ An user can edit its information.
 
 This project is meant to learn skills and practice with Java language, SpringBoot framework and microservices architecture.
 
+It has several _endpoints_ to _get_, _post_, _patch_ and _delete_ data.
+
 ## Database schema
 
 A mysql database is used to save the data.
