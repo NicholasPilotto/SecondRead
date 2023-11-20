@@ -32,7 +32,7 @@ public class SecurityConfiguration {
     httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                   requests -> requests
-                    .requestMatchers(HttpMethod.GET,"user/login").permitAll()
+                    .requestMatchers("/auth/login").permitAll()
                     .requestMatchers("/auth/register").permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
