@@ -1,71 +1,42 @@
 package com.nicholaspilotto.apigateway.services;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.JwsHeader;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.stream.Collectors;
 
 @Service
 public class TokenService {
-  @Value("${jwt.key}")
-  private String jwtKey;
-  private Claims extractAllClaims(String token) {
-    return Jwts.parserBuilder()
-               .setSigningKey(getSigninKey())
-               .build()
-               .parseClaimsJwt(token)
-               .getBody();
+
+  private final JwtEncoder encoder;
+
+  public TokenService(JwtEncoder encoder) {
+    this.encoder = encoder;
   }
 
-  private Key getSigninKey() {
-    byte[] keyBytes = Decoders.BASE64.decode(jwtKey);
-    return Keys.hmacShaKeyFor(keyBytes);
+  public String generateToken(Authentication authentication) {
+    Instant now = Instant.now();
+    String scope = authentication.getAuthorities().stream()
+                                 .map(GrantedAuthority::getAuthority)
+                                 .filter(authority -> !authority.startsWith("ROLE"))
+                                 .collect(Collectors.joining(" "));
+    JwtClaimsSet claims = JwtClaimsSet.builder()
+                                      .issuer("self")
+                                      .issuedAt(now)
+                                      .expiresAt(now.plus(1, ChronoUnit.HOURS))
+                                      .subject(authentication.getName())
+                                      .claim("scope", scope)
+                                      .build();
+    var encoderParameters = JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS512).build(), claims);
+    return this.encoder.encode(encoderParameters).getTokenValue();
   }
 
-  private Date extractExpiration(String token) {
-    return extractClaim(token, Claims::getExpiration);
-  }
-
-  public String extractUserEmail(String token) {
-    return extractClaim(token, Claims::getSubject);
-  }
-
-  public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-    final Claims claims = extractAllClaims(token);
-    return claimsResolver.apply(claims);
-  }
-
-  public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-    return Jwts.builder()
-               .setClaims(extraClaims)
-               .setSubject(userDetails.getUsername())
-               .setIssuedAt(new Date(System.currentTimeMillis()))
-               .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 24)))
-               .signWith(getSigninKey())
-               .signWith(getSigninKey(), SignatureAlgorithm.HS256)
-               .compact();
-  }
-
-  public String generateToken(UserDetails userDetails) {
-    return generateToken(new HashMap<>(), userDetails);
-  }
-
-  public boolean isTokenValid(String token, UserDetails userDetails) {
-    final String userEmail = extractUserEmail(token);
-    return userEmail.equals(userDetails.getUsername()) && isTokenExpired(token);
-  }
-
-  public boolean isTokenExpired(String token) {
-    return extractExpiration(token).before(new Date());
-  }
 }
