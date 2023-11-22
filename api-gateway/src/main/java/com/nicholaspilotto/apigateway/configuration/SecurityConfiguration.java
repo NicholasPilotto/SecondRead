@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -26,7 +27,8 @@ import java.beans.Customizer;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfiguration {
   @Value("${jwt.key}")
   private String jwtKey;
@@ -39,20 +41,16 @@ public class SecurityConfiguration {
   }
 
   @Bean
-  public UserDetailsService userDetailsService() {
-    return userDetailsServiceFeign;
-  }
-
-  @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http
       .csrf(AbstractHttpConfigurer::disable)
-      .authorizeHttpRequests( auth -> auth
-        .requestMatchers("/auth/login").permitAll()
+      .authorizeHttpRequests(auth -> auth
+        .requestMatchers("/user/**").permitAll()
         .anyRequest().permitAll()
       )
+      .userDetailsService(userDetailsServiceFeign)
       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//      .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
+      .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
       .httpBasic(withDefaults())
       .build();
   }
