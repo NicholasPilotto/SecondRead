@@ -8,6 +8,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
+/**
+ * Represents a class with all utilities methods.
+ */
 public final class Utility {
     public Utility () { }
 
@@ -34,6 +37,11 @@ public final class Utility {
     return output;
   }
 
+  /**
+   * Generate {@code number} fake {@link User}s.
+   * @param number number of fake {@code user}s.
+   * @return {@code List<User>} of {@code number} {@code User}s.
+   */
   public static List<User> generateFakeUsers(int number) {
     List<User> result = new ArrayList<>();
     Faker faker = new Faker(Locale.ITALIAN);
