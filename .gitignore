@@ -151,5 +151,7 @@ fabric.properties
 
 # Spring Boot profiles
 **/application-dev.properties
+**/application-dev.yaml
+**/application-dev.yml
 
 # End of https://mrkandreev.name/snippets/gitignore-generator/#Java,macOS,Maven,Intellij,VisualStudioCode

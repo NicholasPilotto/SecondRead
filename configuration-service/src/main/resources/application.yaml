@@ -1,0 +1,6 @@
+server:
+  port: 92978
+
+spring:
+  application:
+    name: configuration-service
