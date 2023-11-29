@@ -14,7 +14,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
    * {@code email}.
    *
    * @param email Email of the desired {@code User}.
-   * @return {@code Optiona<User>} with particular {@code email}.
+   * @return {@code Optional<User>} with particular {@code email}.
    */
   Optional<User> findByEmail(String email);
 
