@@ -2,6 +2,7 @@ package com.nicholaspilotto.userservice.utilities;
 
 import com.github.javafaker.Faker;
 import com.nicholaspilotto.userservice.models.entities.User;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -38,6 +39,15 @@ public final class Utility {
   }
 
   /**
+   * Generate password using {@link BCrypt} algorithm.
+   * @param input string of which to compute the algorithm.
+   * @return BCrypt-ed string.
+   */
+  public static String bcrypt(String input) {
+    return BCrypt.hashpw(input, BCrypt.gensalt());
+  }
+
+  /**
    * Generate {@code number} fake {@link User}s.
    * @param number number of fake {@code user}s.
    * @return {@code List<User>} of {@code number} {@code User}s.
@@ -47,26 +57,21 @@ public final class Utility {
     Faker faker = new Faker(Locale.ITALIAN);
 
     for (int i = 0; i < number; ++i) {
-      try {
-        User user = new User();
-        user.setFirstName(faker.name().firstName());
-        user.setLastName(faker.name().lastName());
-        user.setPhoneNumber(faker.phoneNumber().cellPhone());
+      User user = new User();
+      user.setFirstName(faker.name().firstName());
+      user.setLastName(faker.name().lastName());
+      user.setPhoneNumber(faker.phoneNumber().cellPhone());
 
-        String email = "%s.%s.%d@test.com".formatted(
-          user.getFirstName().toLowerCase(),
-          user.getLastName().toLowerCase(),
-          i
-        );
+      String email = "%s.%s.%d@test.com".formatted(
+        user.getFirstName().toLowerCase(),
+        user.getLastName().toLowerCase(),
+        i
+      );
 
-        user.setEmail(email);
-        user.setPassword(hashMD5(faker.internet().password()));
-        user.setBirthDate(faker.date().birthday(18, 70));
-        result.add(user);
-      } catch (NoSuchAlgorithmException exception) {
-        return result;
-      }
-
+      user.setEmail(email);
+      user.setPassword(bcrypt(faker.internet().password()));
+      user.setBirthDate(faker.date().birthday(18, 70));
+      result.add(user);
     }
     return result;
   }
