@@ -32,7 +32,7 @@ public class User {
   private String phoneNumber;
   private String email;
   @NotNull
-  @Size(min = 32, max = 32)
+  @Size(min = 32, max = 72)
   private String password;
   @Enumerated(EnumType.ORDINAL)
   Role role;
