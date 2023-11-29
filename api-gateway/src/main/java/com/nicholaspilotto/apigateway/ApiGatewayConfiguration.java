@@ -14,6 +14,10 @@ public class ApiGatewayConfiguration {
         return predicateSpec.path("/user/**")
           .uri("lb://user-service");
       })
+      .route(predicateSpec -> {
+        return predicateSpec.path("/auth/**")
+          .uri("lb://auth-service");
+      })
       .build();
   }
 }
