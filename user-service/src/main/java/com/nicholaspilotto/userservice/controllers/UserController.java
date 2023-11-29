@@ -124,21 +124,13 @@ public class UserController {
 
   @GetMapping("/login")
   public ResponseEntity<?> login(@RequestBody @NotNull LoginCredential credential) {
-    try {
-      User user = customerUserService.login(
-          credential.getEmail(),
-          Utility.hashMD5(credential.getPassword())
-      ).orElse(null);
+    User user = customerUserService.login(
+        credential.getEmail(),
+        Utility.bcrypt(credential.getPassword())
+    ).orElse(null);
 
-      UserResponseDTO response = mapper.map(user, UserResponseDTO.class);
-      return new ResponseEntity<>(response, HttpStatus.OK);
-    } catch (NoSuchAlgorithmException exception) {
-      logger.error("Cannot find MD5 algorithm");
-      return new ResponseEntity<>(
-        "Cannot save user due to internal error",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
-    }
+    UserResponseDTO response = mapper.map(user, UserResponseDTO.class);
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   /**
@@ -150,30 +142,22 @@ public class UserController {
    */
   @PostMapping()
   public ResponseEntity<?> create(@Valid @RequestBody UserCreationDTO payload) {
-    try {
-      payload.setPassword(Utility.hashMD5(payload.getPassword()));
+    payload.setPassword(Utility.bcrypt(payload.getPassword()));
 
-      User checkIfExists = customerUserService.getUserByEmail(payload.getEmail()).orElse(null);
+    User checkIfExists = customerUserService.getUserByEmail(payload.getEmail()).orElse(null);
 
-      if (checkIfExists != null) {
-        logger.warn("User with email: %s already exists".formatted(payload.getEmail()));
-        return new ResponseEntity<>("User with this email already exist", HttpStatus.CONFLICT);
-      }
-
-      User newUser = mapper.map(payload, User.class);
-      newUser = customerUserService.createUser(newUser);
-
-      UserResponseDTO response = mapper.map(newUser, UserResponseDTO.class);
-      logger.info("User with id %s has been created.".formatted(newUser.getId()));
-
-      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    } catch (NoSuchAlgorithmException exception) {
-      logger.error("Cannot find MD5 algorithm");
-      return new ResponseEntity<>(
-        "Cannot save user due to internal error",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+    if (checkIfExists != null) {
+      logger.warn("User with email: %s already exists".formatted(payload.getEmail()));
+      return new ResponseEntity<>("User with this email already exist", HttpStatus.CONFLICT);
     }
+
+    User newUser = mapper.map(payload, User.class);
+    newUser = customerUserService.createUser(newUser);
+
+    UserResponseDTO response = mapper.map(newUser, UserResponseDTO.class);
+    logger.info("User with id %s has been created.".formatted(newUser.getId()));
+
+    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
 
   /**
