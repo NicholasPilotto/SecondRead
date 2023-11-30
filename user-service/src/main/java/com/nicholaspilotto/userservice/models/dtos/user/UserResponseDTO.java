@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * Represent user data model used as response.
  */
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+//@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class UserResponseDTO {
   private Long id;
   private String firstName;
