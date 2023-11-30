@@ -1,5 +1,6 @@
 package com.nicholaspilotto.userservice.models.dtos.user;
 
+import com.nicholaspilotto.userservice.models.entities.Role;
 import jakarta.validation.constraints.*;
 
 import java.util.Date;
@@ -23,6 +24,9 @@ public class UserCreationDTO {
   @Size(min = 4, max = 15, message = "Password length must be between 4 and 15")
   private String password;
 
+  @NotNull
+  private Role role;
+
   public UserCreationDTO() { }
 
   public UserCreationDTO(
@@ -31,7 +35,8 @@ public class UserCreationDTO {
     Date birthDate,
     String phoneNumber,
     String email,
-    String password
+    String password,
+    Role role
   ) {
     this.firstName = firstName;
     this.lastName = lastName;
@@ -39,6 +44,7 @@ public class UserCreationDTO {
     this.phoneNumber = phoneNumber;
     this.email = email;
     this.password = password;
+    this.role = role;
   }
 
   public String getFirstName() {
@@ -89,15 +95,24 @@ public class UserCreationDTO {
     this.password = password;
   }
 
+  public Role getRole() {
+    return role;
+  }
+
+  public void setRole(Role role) {
+    this.role = role;
+  }
+
   @Override
   public String toString() {
     return "UserCreationDTO{" +
       "firstName='" + firstName + '\'' +
       ", lastName='" + lastName + '\'' +
-      ", birthDate='" + birthDate + '\'' +
+      ", birthDate=" + birthDate +
       ", phoneNumber='" + phoneNumber + '\'' +
       ", email='" + email + '\'' +
       ", password='" + password + '\'' +
+      ", role=" + role +
       '}';
   }
 }
