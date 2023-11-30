@@ -1,14 +1,19 @@
 package com.nicholaspilotto.authenticationservice.models;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class UserVO {
   private Long id;
+  private String firstName;
+  private String lastName;
+  private Date birthDate;
+  private String phoneNumber;
   private String email;
   private String password;
-  private String role;
+  private Role role;
 
-  public UserVO(Long id, String email, String password, String role) {
+  public UserVO(Long id, String email, String password, Role role) {
     this.id = id;
     this.email = email;
     this.password = password;
@@ -39,11 +44,11 @@ public class UserVO {
     this.password = password;
   }
 
-  public String getRole() {
+  public Role getRole() {
     return role;
   }
 
-  public void setRole(String role) {
+  public void setRole(Role role) {
     this.role = role;
   }
 
