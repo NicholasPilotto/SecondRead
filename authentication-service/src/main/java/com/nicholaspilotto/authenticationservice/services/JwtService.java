@@ -92,7 +92,7 @@ public class JwtService {
    * @return new generated {@code token}.
    */
   public String generateToken(String userId, Role role, String tokenType) {
-    Map<String, String> claims = Map.of("id", userId, "role", role.name());
+    Map<String, String> claims = Map.of("id", userId, "role", role.ordinalString());
     return buildToken(claims, tokenType);
   }
 }
