@@ -142,8 +142,6 @@ public class UserController {
    */
   @PostMapping()
   public ResponseEntity<?> create(@Valid @RequestBody UserCreationDTO payload) {
-    payload.setPassword(Utility.bcrypt(payload.getPassword()));
-
     User checkIfExists = customerUserService.getUserByEmail(payload.getEmail()).orElse(null);
 
     if (checkIfExists != null) {
@@ -152,12 +150,13 @@ public class UserController {
     }
 
     User newUser = mapper.map(payload, User.class);
+    newUser.setPassword(Utility.bcrypt(payload.getPassword()));
     newUser = customerUserService.createUser(newUser);
 
     UserResponseDTO response = mapper.map(newUser, UserResponseDTO.class);
     logger.info("User with id %s has been created.".formatted(newUser.getId()));
 
-    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   /**
