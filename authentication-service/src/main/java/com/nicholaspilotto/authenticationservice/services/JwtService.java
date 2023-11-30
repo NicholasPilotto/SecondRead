@@ -1,5 +1,6 @@
 package com.nicholaspilotto.authenticationservice.services;
 
+import com.nicholaspilotto.authenticationservice.models.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -90,8 +91,8 @@ public class JwtService {
    * @param tokenType type of the {@code token} to generate.
    * @return new generated {@code token}.
    */
-  public String generateToken(String userId, String role, String tokenType) {
-    Map<String, String> claims = Map.of("id", userId, "role", role);
+  public String generateToken(String userId, Role role, String tokenType) {
+    Map<String, String> claims = Map.of("id", userId, "role", role.name());
     return buildToken(claims, tokenType);
   }
 }
