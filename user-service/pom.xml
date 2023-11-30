@@ -82,6 +82,7 @@
 			<artifactId>opentelemetry-exporter-zipkin</artifactId>
 		</dependency>
 
+		<!-- EUREKA	-->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
@@ -103,6 +104,13 @@
 			<artifactId>jbcrypt</artifactId>
 			<version>${jbcrypt.version}</version>
 		</dependency>
+
+		<!--	CONFIG SERVER	-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-config-server</artifactId>
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
