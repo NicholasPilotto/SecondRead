@@ -20,8 +20,8 @@ public class AuthService {
   }
 
   public AuthenticationResponse register(RegisterRequest payload) {
-    payload.setPassword(BCrypt.hashpw(payload.getPassword(), BCrypt.gensalt()));
     UserVO user = restTemplate.postForObject("http://user-service/user", payload, UserVO.class);
+
 
     if (user == null) {
       return null;
