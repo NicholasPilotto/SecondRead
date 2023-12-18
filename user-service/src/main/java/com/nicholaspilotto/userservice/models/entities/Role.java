@@ -23,4 +23,14 @@ public enum Role {
    * The user an employee.
    */
   EMPLOYEE,
+  ;
+
+  @Override
+  public String toString() {
+    return this.name();
+  }
+
+  public String ordinalString() {
+    return "%s".formatted(this.ordinal());
+  }
 }
