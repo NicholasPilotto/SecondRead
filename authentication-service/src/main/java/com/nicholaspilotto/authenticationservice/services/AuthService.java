@@ -22,7 +22,6 @@ public class AuthService {
   public AuthenticationResponse register(RegisterRequest payload) {
     UserVO user = restTemplate.postForObject("http://user-service/user", payload, UserVO.class);
 
-
     if (user == null) {
       return null;
     }
