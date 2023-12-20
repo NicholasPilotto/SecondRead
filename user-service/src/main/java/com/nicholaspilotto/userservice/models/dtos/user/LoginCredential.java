@@ -8,7 +8,7 @@ public class LoginCredential {
   @Email
   private String email;
 
-  @Size(min = 4, max = 15, message = "Password length must be between 4 and 15")
+  @Size(min = 32, max = 72, message = "Password length must be between 4 and 15")
   private String password;
 
   public LoginCredential() {
