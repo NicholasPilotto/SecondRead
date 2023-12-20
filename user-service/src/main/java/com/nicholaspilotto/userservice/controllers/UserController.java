@@ -1,5 +1,6 @@
 package com.nicholaspilotto.userservice.controllers;
 
+import com.nicholaspilotto.userservice.annotations.RoleAdmin;
 import com.nicholaspilotto.userservice.models.dtos.user.LoginCredential;
 import com.nicholaspilotto.userservice.models.dtos.user.UserCreationDTO;
 import com.nicholaspilotto.userservice.models.dtos.user.UserResponseDTO;
@@ -81,6 +82,7 @@ public class UserController {
    * @return Number of user store into the database.
    */
    @GetMapping("/count")
+   @RoleAdmin
    public ResponseEntity<Long> count() {
       Long count = customerUserService.count();
       logger.info("Count has been request. The result is: %s".formatted(count));
@@ -122,7 +124,7 @@ public class UserController {
     return new ResponseEntity<>(responseDTO, HttpStatus.OK);
   }
 
-  @GetMapping("/login")
+  @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody @NotNull LoginCredential credential) {
     User user = customerUserService.login(
         credential.getEmail(),
