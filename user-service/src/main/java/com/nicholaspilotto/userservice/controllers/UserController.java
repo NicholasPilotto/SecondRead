@@ -11,7 +11,6 @@ import com.nicholaspilotto.userservice.utilities.Utility;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -56,8 +56,7 @@ public class UserController {
   @Autowired
   public UserController(
     CustomerUserService customerUserService,
-    ModelMapper mapper
-  ) {
+    ModelMapper mapper) {
     this.customerUserService = customerUserService;
     this.mapper = mapper;
   }
@@ -126,10 +125,17 @@ public class UserController {
 
   @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody @NotNull LoginCredential credential) {
-    User user = customerUserService.login(
-        credential.getEmail(),
-        Utility.bcrypt(credential.getPassword())
-    ).orElse(null);
+    User user = customerUserService.getUserByEmail(credential.getEmail()).orElse(null);
+
+    if (user == null) {
+      return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+    }
+
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+    if (!encoder.matches(credential.getPassword(), user.getPassword())) {
+      return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+    }
 
     UserResponseDTO response = mapper.map(user, UserResponseDTO.class);
     return new ResponseEntity<>(response, HttpStatus.OK);
