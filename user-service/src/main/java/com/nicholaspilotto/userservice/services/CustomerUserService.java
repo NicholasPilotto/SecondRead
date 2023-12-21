@@ -48,11 +48,6 @@ public class CustomerUserService implements UserService {
   }
 
   @Override
-  public Optional<User> login(String email, String password) {
-    return userRepository.findByEmailAndPassword(email, password);
-  }
-
-  @Override
   public void delete(User existing) {
     userRepository.delete(existing);
   }
