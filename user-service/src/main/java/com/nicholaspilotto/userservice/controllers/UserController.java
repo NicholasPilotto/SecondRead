@@ -128,14 +128,18 @@ public class UserController {
     User user = customerUserService.getUserByEmail(credential.getEmail()).orElse(null);
 
     if (user == null) {
+      logger.info("Login failed: user %s does not exists.".formatted(credential.getEmail()));
       return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     if (!encoder.matches(credential.getPassword(), user.getPassword())) {
+      logger.info("Login failed: wrong password.");
       return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
+
+    logger.info("Login successful: %s has logged in.".formatted(credential.getEmail()));
 
     UserResponseDTO response = mapper.map(user, UserResponseDTO.class);
     return new ResponseEntity<>(response, HttpStatus.OK);
