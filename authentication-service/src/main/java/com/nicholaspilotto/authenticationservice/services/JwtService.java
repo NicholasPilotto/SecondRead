@@ -2,6 +2,7 @@ package com.nicholaspilotto.authenticationservice.services;
 
 import com.nicholaspilotto.authenticationservice.models.Role;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -37,7 +38,7 @@ public class JwtService {
    * @return Built {@code token}.
    */
   private String buildToken(Map<String, String> claims, String tokenType) {
-    long expirationTime = Long.parseLong(expiration) * 1000;
+    long expirationTime = Long.parseLong(expiration) * 2;
     long expirationMilliseconds = "ACCESS".equalsIgnoreCase(tokenType) ? expirationTime : expirationTime * 5;
 
     final Date now = new Date();
@@ -62,7 +63,7 @@ public class JwtService {
       .parserBuilder()
       .setSigningKey(key)
       .build()
-      .parseClaimsJwt(token)
+      .parseClaimsJws(token)
       .getBody();
   }
 
