@@ -68,6 +68,7 @@ public class UserController {
    * @return List of users.
    */
   @GetMapping()
+  @RoleAdmin
   public ResponseEntity<?> getAllUsers(final Pageable pageable) {
     List<User> users = customerUserService.getAllUsers(pageable).getContent();
     List<UserResponseDTO> response = Arrays.stream(mapper.map(users, UserResponseDTO[].class)).toList();
