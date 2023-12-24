@@ -37,7 +37,7 @@ public class JwtService {
    * @return Built {@code token}.
    */
   private String buildToken(Map<String, String> claims, String tokenType) {
-    long expirationTime = Long.parseLong(expiration) * 1000;
+    long expirationTime = Long.parseLong(expiration) * 2;
     long expirationMilliseconds = "ACCESS".equalsIgnoreCase(tokenType) ? expirationTime : expirationTime * 5;
 
     final Date now = new Date();
@@ -96,3 +96,4 @@ public class JwtService {
     return buildToken(claims, tokenType);
   }
 }
+
