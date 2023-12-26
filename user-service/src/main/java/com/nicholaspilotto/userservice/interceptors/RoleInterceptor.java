@@ -1,9 +1,9 @@
 package com.nicholaspilotto.userservice.interceptors;
 
 import com.nicholaspilotto.userservice.annotations.RoleAdmin;
+import com.nicholaspilotto.userservice.constants.ProjectConstants;
 import com.nicholaspilotto.userservice.models.entities.Role;
 import com.nicholaspilotto.userservice.services.JwtService;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +16,12 @@ import org.springframework.web.servlet.HandlerInterceptor;
  */
 @Component
 public class RoleInterceptor implements HandlerInterceptor {
-  private static final String AUTHORIZATION_HEADER = "Authorization";
-  private static final String AUTHORIZATION_BEARER = "Bearer ";
-
   private final JwtService jwtService;
 
+  /**
+   * Initializes a new instance of {@code RoleInterceptor} object.
+   * @param jwtService {@code JwtService} reference injection.
+   */
   @Autowired
   public RoleInterceptor(JwtService jwtService) {
     this.jwtService = jwtService;
@@ -46,7 +47,9 @@ public class RoleInterceptor implements HandlerInterceptor {
         return true;
       }
 
-      String token = request.getHeader(AUTHORIZATION_HEADER).replace(AUTHORIZATION_BEARER, "");
+      String token = request
+        .getHeader(ProjectConstants.HTTP_HEADERS.AUTHORIZATION)
+        .replace(ProjectConstants.HTTP_HEADERS.BEARER, "");
 
       if (token.isBlank()) {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -55,7 +58,7 @@ public class RoleInterceptor implements HandlerInterceptor {
       }
 
       boolean isExpired = jwtService.isTokenExpired(token);
-      Role role = Role.values()[Integer.parseInt(jwtService.getClaims(token).get("role", String.class))];
+      Role role = Role.values()[Integer.parseInt(jwtService.getClaims(token).get(ProjectConstants.CLAIMS.ROLE, String.class))];
 
       if (token.isBlank() || isExpired || role != Role.ADMIN) {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
