@@ -1,6 +1,6 @@
 package com.nicholaspilotto.authenticationservice.services;
 
-import com.nicholaspilotto.authenticationservice.constants.UrlServiceRequests;
+import com.nicholaspilotto.authenticationservice.constants.ProjectConstants;
 import com.nicholaspilotto.authenticationservice.models.LoginRequest;
 import com.nicholaspilotto.authenticationservice.models.RegisterRequest;
 import com.nicholaspilotto.authenticationservice.models.UserVO;
@@ -16,10 +16,10 @@ public class AuthService {
   private final RestTemplate restTemplate;
 
   /**
-   * Initializes {@code AuthService} class.
+   * Initializes {@link AuthService} class.
    *
-   * @param restTemplate {@code RestTemplate} class reference.
-   * @param jwtService {@code JwtService} class reference.
+   * @param restTemplate {@link RestTemplate} class reference.
+   * @param jwtService {@link JwtService} class reference.
    */
   @Autowired
   public AuthService(RestTemplate restTemplate, JwtService jwtService) {
@@ -27,31 +27,39 @@ public class AuthService {
   }
 
   /**
-   * Register a new {@code User} into the system.
+   * Register a new {@link UserVO} into the system.
    *
-   * @param payload {@code user} data used to register new user.
-   * @return created {@code User} data.
+   * @param payload {@link UserVO} data used to register new user.
+   * @return created {@link UserVO} data.
    */
   public UserVO register(RegisterRequest payload) {
-    return restTemplate.postForObject(UrlServiceRequests.USER_SERVICE_USER, payload, UserVO.class);
+    return restTemplate.postForObject(ProjectConstants.UrlServiceRequests.USER_SERVICE_USER, payload, UserVO.class);
   }
 
   /**
-   * Login an existing {@code User} into the system.
+   * Login an existing {@link UserVO} into the system.
    *
-   * @param payload {@code User} login credentials.
-   * @return {@code User} if the credentials match, otherwise, {@code null}.
+   * @param payload {@link UserVO} login credentials.
+   * @return {@link UserVO} if the credentials match, otherwise, {@code null}.
    */
   public UserVO login(LoginRequest payload) {
-    return restTemplate.postForObject(UrlServiceRequests.USER_SERVICE_USER + "/login", payload, UserVO.class);
+    return restTemplate.postForObject(
+      ProjectConstants.UrlServiceRequests.USER_SERVICE_USER + "/login",
+      payload,
+      UserVO.class
+    );
   }
 
   /**
-   * Get an existing {@code User} by its identifier.
-   * @param id identifier of the {@code User}.
-   * @return {@code User} with {@code id} as identifier.
+   * Get an existing {@link UserVO} by its identifier.
+   * @param id identifier of the {@link UserVO}.
+   * @return {@link UserVO} with {@code id} as identifier.
    */
   public  UserVO getUserById(Long id) {
-    return restTemplate.getForObject(UrlServiceRequests.USER_SERVICE_USER + "/{id}", UserVO.class, id);
+    return restTemplate.getForObject(
+      ProjectConstants.UrlServiceRequests.USER_SERVICE_USER + "/{id}",
+      UserVO.class,
+      id
+    );
   }
 }
