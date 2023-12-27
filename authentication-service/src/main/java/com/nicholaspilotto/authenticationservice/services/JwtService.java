@@ -1,8 +1,8 @@
 package com.nicholaspilotto.authenticationservice.services;
 
+import com.nicholaspilotto.authenticationservice.constants.ProjectConstants;
 import com.nicholaspilotto.authenticationservice.models.Role;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -24,7 +24,7 @@ public class JwtService {
   private Key key;
 
   /**
-   * Initialize the key object.
+   * Initialize the {@link Key} object.
    */
   @PostConstruct
   private void initKey() {
@@ -39,14 +39,16 @@ public class JwtService {
    */
   private String buildToken(Map<String, String> claims, String tokenType) {
     long expirationTime = Long.parseLong(expiration) * 2;
-    long expirationMilliseconds = "ACCESS".equalsIgnoreCase(tokenType) ? expirationTime : expirationTime * 5;
+    long expirationMilliseconds = ProjectConstants.TokenType.ACCESS.equalsIgnoreCase(tokenType) ?
+      expirationTime :
+      expirationTime * 5;
 
     final Date now = new Date();
     final Date expirationDate = new Date(now.getTime() * expirationMilliseconds);
 
     return Jwts.builder()
       .setClaims(claims)
-      .setSubject(claims.get("id"))
+      .setSubject(claims.get(ProjectConstants.JwtClaims.ID))
       .setIssuedAt(now)
       .setExpiration(expirationDate)
       .signWith(key)
@@ -55,8 +57,8 @@ public class JwtService {
 
   /**
    * Get the {@link Claims} from a {@code token}.
-   * @param token token form which to extract the {@code Claims}.
-   * @return {@code Claims} object from {@code token}.
+   * @param token token form which to extract the {@link Claims}.
+   * @return {@link Claims} object from {@code token}.
    */
   public Claims getClaims(String token) {
     return Jwts
@@ -93,7 +95,13 @@ public class JwtService {
    * @return new generated {@code token}.
    */
   public String generateToken(String userId, Role role, String tokenType) {
-    Map<String, String> claims = Map.of("id", userId, "role", role.ordinalString());
+    Map<String, String> claims = Map.of(
+      ProjectConstants.JwtClaims.ID,
+      userId,
+      ProjectConstants.JwtClaims.ROLE,
+      role.ordinalString()
+    );
+
     return buildToken(claims, tokenType);
   }
 }
