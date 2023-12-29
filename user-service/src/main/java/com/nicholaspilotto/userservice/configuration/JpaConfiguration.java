@@ -1,6 +1,8 @@
 package com.nicholaspilotto.userservice.configuration;
 
 import jakarta.persistence.EntityManagerFactory;
+import java.util.Properties;
+import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,9 +17,9 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.sql.DataSource;
-import java.util.Properties;
-
+/**
+ * Configuration class for {@code JPA} repositories.
+ */
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "package com.nicholaspilotto.userservice.repositories;")
@@ -25,6 +27,11 @@ public class JpaConfiguration {
   @Autowired
   private Environment environment;
 
+  /**
+   * Create an {@link LocalContainerEntityManagerFactoryBean} object.
+   *
+   * @return {@link LocalContainerEntityManagerFactoryBean} filled with project data.
+   */
   @Bean
   public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
     HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
@@ -40,6 +47,11 @@ public class JpaConfiguration {
     return localContainerEntityManager;
   }
 
+  /**
+   * Creates a new instance of {@link DataSource}.
+   *
+   * @return {@link DataSource} object used to connect to the database.
+   */
   @Bean
   public DataSource datasource() {
     DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -51,6 +63,13 @@ public class JpaConfiguration {
     return dataSource;
   }
 
+  /**
+   * Creates a new instance of {@link PlatformTransactionManager}.
+   *
+   * @param entityManagerFactory factory object creator.
+   *
+   * @return {@link PlatformTransactionManager} object.
+   */
   @Bean
   public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
     JpaTransactionManager transactionManager = new JpaTransactionManager();
