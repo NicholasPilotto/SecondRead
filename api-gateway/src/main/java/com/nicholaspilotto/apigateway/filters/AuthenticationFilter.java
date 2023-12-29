@@ -13,6 +13,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+/**
+ * Represents a filter applied to the request to validate and authenticate it.
+ */
 @RefreshScope
 @Component
 public class AuthenticationFilter implements GatewayFilter {
@@ -31,22 +34,22 @@ public class AuthenticationFilter implements GatewayFilter {
 
     if (validator.isSecured.test(request)) {
       if (authMissing(request)) {
-        return onError(exchange, HttpStatus.UNAUTHORIZED);
+        return onError(exchange);
       }
 
       final String token = request.getHeaders().getOrEmpty("Authorization").get(0);
 
       if (jwtService.isExpired(token)) {
-        return onError(exchange, HttpStatus.UNAUTHORIZED);
+        return onError(exchange);
       }
     }
 
     return chain.filter(exchange);
   }
 
-  private Mono<Void> onError(ServerWebExchange exchange, HttpStatus httpStatus) {
+  private Mono<Void> onError(ServerWebExchange exchange) {
     ServerHttpResponse response = exchange.getResponse();
-    response.setStatusCode(httpStatus);
+    response.setStatusCode(HttpStatus.UNAUTHORIZED);
     return response.setComplete();
   }
 
