@@ -59,7 +59,11 @@ public class RoleInterceptor implements HandlerInterceptor {
       }
 
       boolean isExpired = jwtService.isTokenExpired(token);
-      Role role = Role.values()[Integer.parseInt(jwtService.getClaims(token).get(ProjectConstants.CLAIMS.ROLE, String.class))];
+      Role role = Role.values()[Integer.parseInt(
+        jwtService
+          .getClaims(token)
+          .get(ProjectConstants.CLAIMS.ROLE, String.class)
+      )];
 
       if (token.isBlank() || isExpired || role != Role.ADMIN) {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

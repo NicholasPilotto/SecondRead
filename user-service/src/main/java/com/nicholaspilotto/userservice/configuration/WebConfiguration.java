@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * Implementation of {@link WebMvcConfigurer} to add {@link RoleInterceptor}.
+ */
 @Component
 public class WebConfiguration implements WebMvcConfigurer {
   private final RoleInterceptor roleInterceptor;

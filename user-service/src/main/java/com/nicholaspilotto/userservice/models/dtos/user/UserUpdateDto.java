@@ -1,22 +1,30 @@
 package com.nicholaspilotto.userservice.models.dtos.user;
 
-import java.util.Date;
-
 import com.nicholaspilotto.userservice.models.entities.User;
+import java.util.Date;
 
 /**
  * Represents the model used to update User data.
  */
-public class UserUpdateDTO {
+public class UserUpdateDto {
   private String firstName;
   private String lastName;
   private Date birthDate;
   private String phoneNumber;
   private String email;
 
-  public UserUpdateDTO() { }
+  public UserUpdateDto() { }
 
-  public UserUpdateDTO(
+  /**
+   * Creates a new instance of {@link UserUpdateDto}.
+   *
+   * @param firstName user first name.
+   * @param lastName user last name.
+   * @param birthDate user birthdate.
+   * @param phoneNumber user phone number.
+   * @param email user email address.
+   */
+  public UserUpdateDto(
     String firstName,
     String lastName,
     Date birthDate,
@@ -72,7 +80,9 @@ public class UserUpdateDTO {
 
   /**
    * Overwrite existing User data with new data.
+   *
    * @param existing User already stored into database.
+   *
    * @return Updated User data.
    */
   public User overwrite(User existing) {

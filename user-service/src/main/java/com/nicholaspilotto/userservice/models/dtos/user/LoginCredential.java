@@ -4,6 +4,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+/**
+ * Dto class used to log user into the system.
+ */
 public class LoginCredential {
   @Email
   private String email;
@@ -37,9 +40,9 @@ public class LoginCredential {
 
   @Override
   public String toString() {
-    return "LoginCredential{" +
-      "email='" + email + '\'' +
-      ", password='" + password + '\'' +
-      '}';
+    return "LoginCredential{"
+      + "email='" + email + '\''
+      + ", password='" + password + '\''
+      + '}';
   }
 }

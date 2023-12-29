@@ -2,9 +2,9 @@ package com.nicholaspilotto.userservice.controllers;
 
 import com.nicholaspilotto.userservice.annotations.RoleAdmin;
 import com.nicholaspilotto.userservice.models.dtos.user.LoginCredential;
-import com.nicholaspilotto.userservice.models.dtos.user.UserCreationDTO;
-import com.nicholaspilotto.userservice.models.dtos.user.UserResponseDTO;
-import com.nicholaspilotto.userservice.models.dtos.user.UserUpdateDTO;
+import com.nicholaspilotto.userservice.models.dtos.user.UserCreationDto;
+import com.nicholaspilotto.userservice.models.dtos.user.UserResponseDto;
+import com.nicholaspilotto.userservice.models.dtos.user.UserUpdateDto;
 import com.nicholaspilotto.userservice.models.entities.User;
 import com.nicholaspilotto.userservice.services.CustomerUserService;
 import com.nicholaspilotto.userservice.utilities.Utility;
@@ -71,7 +71,7 @@ public class UserController {
   @RoleAdmin
   public ResponseEntity<?> getAllUsers(final Pageable pageable) {
     List<User> users = customerUserService.getAllUsers(pageable).getContent();
-    List<UserResponseDTO> response = Arrays.stream(mapper.map(users, UserResponseDTO[].class)).toList();
+    List<UserResponseDto> response = Arrays.stream(mapper.map(users, UserResponseDto[].class)).toList();
     logger.info("Users has been requested.");
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
@@ -81,13 +81,13 @@ public class UserController {
    *
    * @return Number of user store into the database.
    */
-   @GetMapping("/count")
-   @RoleAdmin
-   public ResponseEntity<Long> count() {
-      Long count = customerUserService.count();
-      logger.info("Count has been request. The result is: %s".formatted(count));
-      return new ResponseEntity<>(count, HttpStatus.OK);
-   }
+  @GetMapping("/count")
+  @RoleAdmin
+  public ResponseEntity<Long> count() {
+    Long count = customerUserService.count();
+    logger.info("Count has been request. The result is: %s".formatted(count));
+    return new ResponseEntity<>(count, HttpStatus.OK);
+  }
 
   /**
    * Method used to get user by id.
@@ -106,10 +106,17 @@ public class UserController {
     }
 
     logger.info("User with id %s has been found.".formatted(id));
-    UserResponseDTO response = mapper.map(user, UserResponseDTO.class);
+    UserResponseDto response = mapper.map(user, UserResponseDto.class);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
+  /**
+   * Get {@link User} by email.
+   *
+   * @param email {@link User} email.
+   *
+   * @return {@link User} with {@code email}.
+   */
   @GetMapping("/email/{email}")
   public ResponseEntity<?> getByEmail(@PathVariable @Email String email) {
     User user = customerUserService.getUserByEmail(email).orElse(null);
@@ -119,11 +126,18 @@ public class UserController {
     }
 
     logger.info("User with email %s has been found".formatted(email));
-    UserResponseDTO responseDTO = mapper.map(user, UserResponseDTO.class);
+    UserResponseDto responseDto = mapper.map(user, UserResponseDto.class);
 
-    return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    return new ResponseEntity<>(responseDto, HttpStatus.OK);
   }
 
+  /**
+   * Login {@link User} into the system.
+   *
+   * @param credential {@link User} credential, such as {@code email} and {@code password}.
+   *
+   * @return {@link User} data if the credentials are correct, otherwise, {@code NO_CONTENT} response.
+   */
   @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody @NotNull LoginCredential credential) {
     User user = customerUserService.getUserByEmail(credential.getEmail()).orElse(null);
@@ -142,19 +156,19 @@ public class UserController {
 
     logger.info("Login successful: %s has logged in.".formatted(credential.getEmail()));
 
-    UserResponseDTO response = mapper.map(user, UserResponseDTO.class);
+    UserResponseDto response = mapper.map(user, UserResponseDto.class);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   /**
-   * Method used to create new user.
-   *
-   * @param payload user data to store into the database.
-   * See {@link com.nicholaspilotto.userservice.models.dtos.user.UserCreationDTO}
-   * @return Created user object.
+    * Method used to create new user.
+    *
+    * @param payload user data to store into the database. See
+    *     {@link UserCreationDto}.
+    * @return Created user object.
    */
   @PostMapping()
-  public ResponseEntity<?> create(@Valid @RequestBody UserCreationDTO payload) {
+  public ResponseEntity<?> create(@Valid @RequestBody UserCreationDto payload) {
     User checkIfExists = customerUserService.getUserByEmail(payload.getEmail()).orElse(null);
 
     if (checkIfExists != null) {
@@ -166,7 +180,7 @@ public class UserController {
     newUser.setPassword(Utility.bcrypt(payload.getPassword()));
     newUser = customerUserService.createUser(newUser);
 
-    UserResponseDTO response = mapper.map(newUser, UserResponseDTO.class);
+    UserResponseDto response = mapper.map(newUser, UserResponseDto.class);
     logger.info("User with id %s has been created.".formatted(newUser.getId()));
 
     return new ResponseEntity<>(response, HttpStatus.OK);
@@ -177,13 +191,13 @@ public class UserController {
    *
    * @param id id of the user that needs to be updated.
    * @param payload New user data.
-   * See {@link com.nicholaspilotto.userservice.models.dtos.user.UserUpdateDTO}
+   *     See {@link UserUpdateDto}
    * @return Updated user data.
    */
   @PatchMapping("/{id}")
   public ResponseEntity<?> update(
     @PathVariable Long id,
-    @RequestBody UserUpdateDTO payload
+    @RequestBody UserUpdateDto payload
   ) {
     User existing = customerUserService.getUserById(id).orElse(null);
 
@@ -198,7 +212,7 @@ public class UserController {
     existing = payload.overwrite(existing);
 
     existing = customerUserService.update(existing);
-    UserResponseDTO response = mapper.map(existing, UserResponseDTO.class);
+    UserResponseDto response = mapper.map(existing, UserResponseDto.class);
 
     logger.info("User with id %s has been updated".formatted(id));
 

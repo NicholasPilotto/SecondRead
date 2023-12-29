@@ -1,14 +1,17 @@
 package com.nicholaspilotto.userservice.models.dtos.user;
 
 import com.nicholaspilotto.userservice.models.entities.Role;
-import jakarta.validation.constraints.*;
-
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.util.Date;
 
 /**
  * Represents user data used to create a new user object.
  */
-public class UserCreationDTO {
+public class UserCreationDto {
   @NotEmpty
   @Size(min = 2, max = 200, message = "First name length must be between 2 and 200")
   private String firstName;
@@ -27,9 +30,20 @@ public class UserCreationDTO {
   @NotNull
   private Role role;
 
-  public UserCreationDTO() { }
+  public UserCreationDto() { }
 
-  public UserCreationDTO(
+  /**
+   * Creates a new instance of {@link UserCreationDto}.
+   *
+   * @param firstName user first name.
+   * @param lastName user last name.
+   * @param birthDate user birthday.
+   * @param phoneNumber user phone number.
+   * @param email user email address.
+   * @param password user password.
+   * @param role user role.
+   */
+  public UserCreationDto(
     String firstName,
     String lastName,
     Date birthDate,
@@ -105,14 +119,14 @@ public class UserCreationDTO {
 
   @Override
   public String toString() {
-    return "UserCreationDTO{" +
-      "firstName='" + firstName + '\'' +
-      ", lastName='" + lastName + '\'' +
-      ", birthDate=" + birthDate +
-      ", phoneNumber='" + phoneNumber + '\'' +
-      ", email='" + email + '\'' +
-      ", password='" + password + '\'' +
-      ", role=" + role +
-      '}';
+    return "UserCreationDTO{"
+      + "firstName='" + firstName + '\''
+      + ", lastName='" + lastName + '\''
+      + ", birthDate=" + birthDate
+      + ", phoneNumber='" + phoneNumber + '\''
+      + ", email='" + email + '\''
+      + ", password='" + password + '\''
+      + ", role=" + role
+      + '}';
   }
 }

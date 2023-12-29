@@ -1,16 +1,22 @@
 package com.nicholaspilotto.userservice.models.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Objects;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Represents a user object entity.
@@ -46,7 +52,8 @@ public class User {
   public User() { }
 
   /**
-   * Class constructor
+   * Class constructor.
+   *
    * @param id id of the user.
    * @param firstName first name of the user.
    * @param lastName last name of the user.
@@ -84,6 +91,7 @@ public class User {
 
   /**
    * Gets the id of the user.
+   *
    * @return id of the user.
    */
   public long getId() {
@@ -92,6 +100,7 @@ public class User {
 
   /**
    * Gets the user first name.
+   *
    * @return user first name.
    */
   public String getFirstName() {
@@ -100,6 +109,7 @@ public class User {
 
   /**
    * Sets the first name to the user.
+   *
    * @param firstName first name to set to the user.
    */
   public void setFirstName(String firstName) {
@@ -108,6 +118,7 @@ public class User {
 
   /**
    * Get the user last name.
+   *
    * @return user last name.
    */
   public String getLastName() {
@@ -116,6 +127,7 @@ public class User {
 
   /**
    * Sets the last name to the user.
+   *
    * @param lastName last name to set to the user.
    */
   public void setLastName(String lastName) {
@@ -124,6 +136,7 @@ public class User {
 
   /**
    * Gets the user birthdate.
+   *
    * @return user birthdate.
    */
   public Date getBirthDate() {
@@ -132,6 +145,7 @@ public class User {
 
   /**
    * Sets the birthdate to the user.
+   *
    * @param birthDate birthdate to set to the user.
    */
   public void setBirthDate(Date birthDate) {
@@ -140,6 +154,7 @@ public class User {
 
   /**
    * Gets the user phone number.
+   *
    * @return phone number of the user.
    */
   public String getPhoneNumber() {
@@ -148,6 +163,7 @@ public class User {
 
   /**
    * Sets the phone number to the user.
+   *
    * @param phoneNumber phone number to set to the user.
    */
   public void setPhoneNumber(String phoneNumber) {
@@ -156,6 +172,7 @@ public class User {
 
   /**
    * Gets the user email.
+   *
    * @return email of the user.
    */
   public String getEmail() {
@@ -164,6 +181,7 @@ public class User {
 
   /**
    * Sets the email to the user.
+   *
    * @param email email of the user.
    */
   public void setEmail(String email) {
@@ -172,6 +190,7 @@ public class User {
 
   /**
    * Gets the user password.
+   *
    * @return password of the user.
    */
   public String getPassword() {
@@ -180,6 +199,7 @@ public class User {
 
   /**
    * Sets the password to the user.
+   *
    * @param password password of the user.
    */
   public void setPassword(String password) {
@@ -188,6 +208,7 @@ public class User {
 
   /**
    * Gets the role of the user.
+   *
    * @return role of the user.
    */
   public Role getRole() {
@@ -196,6 +217,7 @@ public class User {
 
   /**
    * Sets the role to the user.
+   *
    * @param role role of the user.
    */
   public void setRole(Role role) {
@@ -211,6 +233,7 @@ public class User {
 
   /**
    * Sets the creation date of the user.
+   *
    * @param createdAt creation date of the user.
    */
   public void setCreatedAt(LocalDateTime createdAt) {
@@ -226,6 +249,7 @@ public class User {
 
   /**
    * Sets the last update date of the user.
+   *
    * @param updatedAt last update date of the user.
    */
   public void setUpdatedAt(LocalDateTime updatedAt) {
@@ -234,7 +258,9 @@ public class User {
 
   /**
    * Check if two object equals.
+   *
    * @param o object to check if is equals to current object.
+   *
    * @return true if the two object are equal, false otherwise.
    */
   @Override
@@ -252,6 +278,7 @@ public class User {
 
   /**
    * Generate current user hash code.
+   *
    * @return the hash code of the current user object.
    */
   @Override
@@ -261,21 +288,22 @@ public class User {
 
   /**
    * Transform current user object into string.
+   *
    * @return string representing current user object.
    */
   @Override
   public String toString() {
-    return "User{" +
-      "id=" + id +
-      ", firstName='" + firstName + '\'' +
-      ", lastName='" + lastName + '\'' +
-      ", birthDate=" + birthDate +
-      ", phoneNumber='" + phoneNumber + '\'' +
-      ", email='" + email + '\'' +
-      ", password='" + password + '\'' +
-      ", role=" + role +
-      ", createdAt=" + createdAt +
-      ", updatedAt=" + updatedAt +
-      '}';
+    return "User{"
+      + "id=" + id
+      + ", firstName='" + firstName + '\''
+      + ", lastName='" + lastName + '\''
+      + ", birthDate=" + birthDate
+      + ", phoneNumber='" + phoneNumber + '\''
+      + ", email='" + email + '\''
+      + ", password='" + password + '\''
+      + ", role=" + role
+      + ", createdAt=" + createdAt
+      + ", updatedAt=" + updatedAt
+      + '}';
   }
 }

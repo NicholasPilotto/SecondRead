@@ -3,12 +3,12 @@ package com.nicholaspilotto.userservice.services;
 import com.nicholaspilotto.userservice.models.entities.User;
 import com.nicholaspilotto.userservice.repositories.UserRepository;
 import com.nicholaspilotto.userservice.services.interfaces.UserService;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 /**
  * Represents the customer user service class used to
@@ -23,6 +23,7 @@ public class CustomerUserService implements UserService {
   public Page<User> getAllUsers(Pageable pageable) {
     return userRepository.findAll(pageable);
   }
+
   @Override
   public Optional<User> getUserById(Long id) {
     return userRepository.findById(id);
@@ -32,6 +33,7 @@ public class CustomerUserService implements UserService {
   public Optional<User> getUserByEmail(String email) {
     return userRepository.findByEmail(email);
   }
+
   @Override
   public User createUser(User user) {
     return userRepository.save(user);
