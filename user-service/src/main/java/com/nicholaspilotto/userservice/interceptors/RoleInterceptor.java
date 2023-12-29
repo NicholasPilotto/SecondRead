@@ -20,6 +20,7 @@ public class RoleInterceptor implements HandlerInterceptor {
 
   /**
    * Initializes a new instance of {@code RoleInterceptor} object.
+   *
    * @param jwtService {@code JwtService} reference injection.
    */
   @Autowired
@@ -62,7 +63,8 @@ public class RoleInterceptor implements HandlerInterceptor {
 
       if (token.isBlank() || isExpired || role != Role.ADMIN) {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getWriter().write("User not authenticated or not allowed to access to this resource.");
+        response.getWriter()
+                .write("User not authenticated or not allowed to access to this resource.");
         return false;
       }
     }
