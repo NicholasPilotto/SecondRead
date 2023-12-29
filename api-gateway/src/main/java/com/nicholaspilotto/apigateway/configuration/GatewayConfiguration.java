@@ -8,6 +8,9 @@ import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuration class that redirect requests to the correct service.
+ */
 @Configuration
 @EnableHystrix
 public class GatewayConfiguration {
@@ -18,6 +21,13 @@ public class GatewayConfiguration {
     this.filter = filter;
   }
 
+  /**
+   * Locate requests to its service.
+   *
+   * @param builder {@link RouteLocatorBuilder} builder object.
+   *
+   * @return {@link RouteLocator} object.
+   */
   @Bean
   public RouteLocator routes(RouteLocatorBuilder builder) {
     return builder.routes()
