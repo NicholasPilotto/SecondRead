@@ -49,8 +49,8 @@ public class RoleInterceptor implements HandlerInterceptor {
       }
 
       String token = request
-        .getHeader(ProjectConstants.HTTP_HEADERS.AUTHORIZATION)
-        .replace(ProjectConstants.HTTP_HEADERS.BEARER, "");
+        .getHeader(ProjectConstants.HttpHeaders.AUTHORIZATION)
+        .replace(ProjectConstants.HttpHeaders.BEARER, "");
 
       if (token.isBlank()) {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -62,7 +62,7 @@ public class RoleInterceptor implements HandlerInterceptor {
       Role role = Role.values()[Integer.parseInt(
         jwtService
           .getClaims(token)
-          .get(ProjectConstants.CLAIMS.ROLE, String.class)
+          .get(ProjectConstants.Claims.ROLE, String.class)
       )];
 
       if (token.isBlank() || isExpired || role != Role.ADMIN) {

@@ -7,7 +7,7 @@ public class ProjectConstants {
   /**
    * Contains constants that represent {@code HTTP} headers.
    */
-  public static class HTTP_HEADERS {
+  public static class HttpHeaders {
     /**
      * {@code HTTP} authorization header.
      */
@@ -21,7 +21,7 @@ public class ProjectConstants {
   /**
    * Contains all constants used to get values from {@code JWT} token claims.
    */
-  public static class CLAIMS {
+  public static class Claims {
     /**
      * {@code role} claims.
      */
