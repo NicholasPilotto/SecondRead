@@ -206,6 +206,7 @@
 					<violationSeverity>warning</violationSeverity>
 					<failsOnError>true</failsOnError>
 					<linkXRef>false</linkXRef>
+					<suppressionsLocation>suppressions.xml</suppressionsLocation>
 				</configuration>
 				<executions>
 					<execution>
