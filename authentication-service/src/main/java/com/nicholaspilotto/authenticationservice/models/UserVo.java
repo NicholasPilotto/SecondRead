@@ -4,7 +4,10 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
-public class UserVO {
+/**
+ * {@code Value Object} class for {@code User} model.
+ */
+public class UserVo {
   private Long id;
   private String firstName;
   private String lastName;
@@ -15,9 +18,22 @@ public class UserVO {
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 
-  public UserVO() { }
+  public UserVo() { }
 
-  public UserVO(
+  /**
+   * Creates a new instance of {@link UserVo} object.
+   *
+   * @param id user identifier.
+   * @param firstName user first name.
+   * @param lastName user last name.
+   * @param birthDate user birthdate.
+   * @param phoneNumber user phone number.
+   * @param email user email address.
+   * @param role user {@link Role}.
+   * @param createdAt user account creation date.
+   * @param updatedAt last user account update date.
+   */
+  public UserVo(
     Long id,
     String firstName,
     String lastName,
@@ -119,19 +135,19 @@ public class UserVO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    UserVO userVO = (UserVO) o;
-    return Objects.equals(id, userVO.id) && Objects.equals(
+    UserVo user = (UserVo) o;
+    return Objects.equals(id, user.id) && Objects.equals(
       firstName,
-      userVO.firstName
-    ) && Objects.equals(lastName, userVO.lastName) && Objects.equals(
+      user.firstName
+    ) && Objects.equals(lastName, user.lastName) && Objects.equals(
       birthDate,
-      userVO.birthDate
-    ) && Objects.equals(phoneNumber, userVO.phoneNumber) && Objects.equals(
+      user.birthDate
+    ) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(
       email,
-      userVO.email
-    ) && role == userVO.role && Objects.equals(createdAt, userVO.createdAt) && Objects.equals(
+      user.email
+    ) && role == user.role && Objects.equals(createdAt, user.createdAt) && Objects.equals(
       updatedAt,
-      userVO.updatedAt
+      user.updatedAt
     );
   }
 
@@ -142,16 +158,16 @@ public class UserVO {
 
   @Override
   public String toString() {
-    return "UserResponseDTO{" +
-      "id=" + id +
-      ", firstName='" + firstName + '\'' +
-      ", lastName='" + lastName + '\'' +
-      ", birthDate=" + birthDate +
-      ", phoneNumber='" + phoneNumber + '\'' +
-      ", email='" + email + '\'' +
-      ", role=" + role +
-      ", createdAt=" + createdAt +
-      ", updatedAt=" + updatedAt +
-      '}';
+    return "UserResponseDTO{"
+      + "id=" + id
+      + ", firstName='" + firstName + '\''
+      + ", lastName='" + lastName + '\''
+      + ", birthDate=" + birthDate
+      + ", phoneNumber='" + phoneNumber + '\''
+      + ", email='" + email + '\''
+      + ", role=" + role
+      + ", createdAt=" + createdAt
+      + ", updatedAt=" + updatedAt
+      + '}';
   }
 }

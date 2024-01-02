@@ -3,7 +3,7 @@ package com.nicholaspilotto.authenticationservice.services;
 import com.nicholaspilotto.authenticationservice.constants.ProjectConstants;
 import com.nicholaspilotto.authenticationservice.models.LoginRequest;
 import com.nicholaspilotto.authenticationservice.models.RegisterRequest;
-import com.nicholaspilotto.authenticationservice.models.UserVO;
+import com.nicholaspilotto.authenticationservice.models.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -27,38 +27,38 @@ public class AuthService {
   }
 
   /**
-   * Register a new {@link UserVO} into the system.
+   * Register a new {@link UserVo} into the system.
    *
-   * @param payload {@link UserVO} data used to register new user.
-   * @return created {@link UserVO} data.
+   * @param payload {@link UserVo} data used to register new user.
+   * @return created {@link UserVo} data.
    */
-  public UserVO register(RegisterRequest payload) {
-    return restTemplate.postForObject(ProjectConstants.UrlServiceRequests.USER_SERVICE_USER, payload, UserVO.class);
+  public UserVo register(RegisterRequest payload) {
+    return restTemplate.postForObject(ProjectConstants.UrlServiceRequests.USER_SERVICE_USER, payload, UserVo.class);
   }
 
   /**
-   * Login an existing {@link UserVO} into the system.
+   * Login an existing {@link UserVo} into the system.
    *
-   * @param payload {@link UserVO} login credentials.
-   * @return {@link UserVO} if the credentials match, otherwise, {@code null}.
+   * @param payload {@link UserVo} login credentials.
+   * @return {@link UserVo} if the credentials match, otherwise, {@code null}.
    */
-  public UserVO login(LoginRequest payload) {
+  public UserVo login(LoginRequest payload) {
     return restTemplate.postForObject(
       ProjectConstants.UrlServiceRequests.USER_SERVICE_USER + "/login",
       payload,
-      UserVO.class
+      UserVo.class
     );
   }
 
   /**
-   * Get an existing {@link UserVO} by its identifier.
-   * @param id identifier of the {@link UserVO}.
-   * @return {@link UserVO} with {@code id} as identifier.
+   * Get an existing {@link UserVo} by its identifier.
+   * @param id identifier of the {@link UserVo}.
+   * @return {@link UserVo} with {@code id} as identifier.
    */
-  public  UserVO getUserById(Long id) {
+  public UserVo getUserById(Long id) {
     return restTemplate.getForObject(
       ProjectConstants.UrlServiceRequests.USER_SERVICE_USER + "/{id}",
-      UserVO.class,
+      UserVo.class,
       id
     );
   }

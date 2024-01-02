@@ -2,15 +2,29 @@ package com.nicholaspilotto.authenticationservice.models;
 
 import java.util.Date;
 
+/**
+ * Model used to register a new {@code User} into the system.
+ */
 public class RegisterRequest {
   private String firstName;
   private String lastName;
-  private String email;
+  private String mail;
   private Date birthDate;
   private String phoneNumber;
   private String password;
   private Role role;
 
+  /**
+   * Creates a new instance of {@link RegisterRequest} object.
+   *
+   * @param firstName user first name.
+   * @param lastName user last name.
+   * @param email user email address.
+   * @param birthDate user birthdate-
+   * @param phoneNumber user phone number.
+   * @param password user password.
+   * @param role user {@link Role}.
+   */
   public RegisterRequest(
     String firstName,
     String lastName,
@@ -22,7 +36,7 @@ public class RegisterRequest {
   ) {
     this.firstName = firstName;
     this.lastName = lastName;
-    this.email = email;
+    this.mail = email;
     this.birthDate = birthDate;
     this.phoneNumber = phoneNumber;
     this.password = password;
@@ -45,12 +59,12 @@ public class RegisterRequest {
     this.lastName = lastName;
   }
 
-  public String getEmail() {
-    return email;
+  public String getMail() {
+    return mail;
   }
 
-  public void setEmail(String email) {
-    email = email;
+  public void setMail(String mail) {
+    mail = mail;
   }
 
   public Date getBirthDate() {
@@ -87,14 +101,14 @@ public class RegisterRequest {
 
   @Override
   public String toString() {
-    return "RegisterRequest{" +
-      "firstName='" + firstName + '\'' +
-      ", lastName='" + lastName + '\'' +
-      ", email='" + email + '\'' +
-      ", birthDate=" + birthDate +
-      ", phoneNumber='" + phoneNumber + '\'' +
-      ", password='" + password + '\'' +
-      ", role=" + role +
-      '}';
+    return "RegisterRequest{"
+      + "firstName='" + firstName + '\''
+      + ", lastName='" + lastName + '\''
+      + ", email='" + mail + '\''
+      + ", birthDate=" + birthDate
+      + ", phoneNumber='" + phoneNumber + '\''
+      + ", password='" + password + '\''
+      + ", role=" + role
+      + '}';
   }
 }

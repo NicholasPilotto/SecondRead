@@ -1,9 +1,18 @@
 package com.nicholaspilotto.authenticationservice.models;
 
+/**
+ * Model used to return a successful authentication response.
+ */
 public class AuthenticationResponse {
   private String accessToken;
   private String refreshToken;
 
+  /**
+   * Creates a new instance of {@link AuthenticationResponse} object.
+   *
+   * @param accessToken token for authenticating and authorizing request.
+   * @param refreshToken token for refreshing {@link #accessToken}.
+   */
   public AuthenticationResponse(String accessToken, String refreshToken) {
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
@@ -27,9 +36,9 @@ public class AuthenticationResponse {
 
   @Override
   public String toString() {
-    return "AuthenticationResponse{" +
-      "accessToken='" + accessToken + '\'' +
-      ", refreshToken='" + refreshToken + '\'' +
-      '}';
+    return "AuthenticationResponse{"
+      + "accessToken='" + accessToken + '\''
+      + ", refreshToken='" + refreshToken + '\''
+      + '}';
   }
 }

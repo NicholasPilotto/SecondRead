@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * Builder class for {@link RestTemplate} objects.
+ */
 @Configuration
 public class RestTemplateBuilderConfiguration {
   @LoadBalanced

@@ -4,7 +4,7 @@ import com.nicholaspilotto.authenticationservice.constants.ProjectConstants;
 import com.nicholaspilotto.authenticationservice.models.AuthenticationResponse;
 import com.nicholaspilotto.authenticationservice.models.LoginRequest;
 import com.nicholaspilotto.authenticationservice.models.RegisterRequest;
-import com.nicholaspilotto.authenticationservice.models.UserVO;
+import com.nicholaspilotto.authenticationservice.models.UserVo;
 import com.nicholaspilotto.authenticationservice.services.AuthService;
 import com.nicholaspilotto.authenticationservice.services.JwtService;
 import io.jsonwebtoken.Claims;
@@ -39,11 +39,11 @@ public class AuthController {
   /**
    * Creates a new reference of type {@link  AuthenticationResponse}.
    *
-   * @param user {@link UserVO} from which to build the {@link  AuthenticationResponse}.
+   * @param user {@link UserVo} from which to build the {@link  AuthenticationResponse}.
    *
-   * @return {@link AuthenticationResponse} with {@link UserVO} ACCESS and REFRESH {@code JWT}.
+   * @return {@link AuthenticationResponse} with {@link UserVo} ACCESS and REFRESH {@code JWT}.
    */
-  private AuthenticationResponse createAuthenticationResponse(UserVO user) {
+  private AuthenticationResponse createAuthenticationResponse(UserVo user) {
     String accessToken = jwtService.generateToken(
       user.getId().toString(),
       user.getRole(),
@@ -60,15 +60,15 @@ public class AuthController {
   }
 
   /**
-   * Register a new{@link UserVO} into the system.
-   * @param payload new {@link  UserVO} data.
+   * Register a new{@link UserVo} into the system.
+   * @param payload new {@link  UserVo} data.
    *
    * @return if the registration was successful, a new instance of {@link AuthenticationResponse},
    * otherwise, {@code BAD_REQUEST} status.
    */
   @PostMapping("/register")
   public ResponseEntity<?> register(@RequestBody RegisterRequest payload) {
-    UserVO user = authService.register(payload);
+    UserVo user = authService.register(payload);
 
     if (user == null) {
       return new ResponseEntity<>("Cannot register this user.", HttpStatus.BAD_REQUEST);
@@ -80,15 +80,15 @@ public class AuthController {
   }
 
   /**
-   * Login an existing {@link UserVO} into the system.
+   * Login an existing {@link UserVo} into the system.
    *
-   * @param payload {@link UserVO} login credentials.
+   * @param payload {@link UserVo} login credentials.
    * @return if the login was successful, a new instance of {@link AuthenticationResponse},
    * otherwise, {@code BAD_REQUEST} status.
    */
   @GetMapping("/login")
   public ResponseEntity<?> login(@RequestBody LoginRequest payload) {
-    UserVO user = authService.login(payload);
+    UserVo user = authService.login(payload);
 
     if (user == null) {
       return new ResponseEntity<>("Cannot login this user.", HttpStatus.BAD_REQUEST);
@@ -100,10 +100,10 @@ public class AuthController {
   }
 
   /**
-   * Get {@link  UserVO} data from a {@code JWT} token.
+   * Get {@link  UserVo} data from a {@code JWT} token.
    *
-   * @param token {@code JWT} token used to get {@link UserVO} data.
-   * @return {@link UserVO} data got from {@code token}.
+   * @param token {@code JWT} token used to get {@link UserVo} data.
+   * @return {@link UserVo} data got from {@code token}.
    */
   @GetMapping("/whoami")
   public ResponseEntity<?> whoami(@NotNull @RequestHeader("Authorization") String token) {
@@ -115,7 +115,7 @@ public class AuthController {
     Claims claims = jwtService.getClaims(token);
     Long userId = Long.parseLong(claims.get(ProjectConstants.JwtClaims.ID, String.class));
 
-    UserVO user = authService.getUserById(userId);
+    UserVo user = authService.getUserById(userId);
 
     return new ResponseEntity<>(user, HttpStatus.OK);
   }
