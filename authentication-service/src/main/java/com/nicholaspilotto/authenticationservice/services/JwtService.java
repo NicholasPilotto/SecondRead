@@ -6,13 +6,15 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import java.security.Key;
 import java.util.Date;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
+/**
+ * {@code JWT} service class.
+ */
 @Service
 public class JwtService {
   @Value("${jwt.secret}")
@@ -33,15 +35,16 @@ public class JwtService {
 
   /**
    * Build a new {@code token}.
+   *
    * @param claims {@code token} metadata.
    * @param tokenType type of the {@code token} to build.
    * @return Built {@code token}.
    */
   private String buildToken(Map<String, String> claims, String tokenType) {
     long expirationTime = Long.parseLong(expiration) * 2;
-    long expirationMilliseconds = ProjectConstants.TokenType.ACCESS.equalsIgnoreCase(tokenType) ?
-      expirationTime :
-      expirationTime * 5;
+    long expirationMilliseconds = ProjectConstants.TokenType.ACCESS.equalsIgnoreCase(tokenType)
+      ? expirationTime
+      : expirationTime * 5;
 
     final Date now = new Date();
     final Date expirationDate = new Date(now.getTime() * expirationMilliseconds);
@@ -57,7 +60,9 @@ public class JwtService {
 
   /**
    * Get the {@link Claims} from a {@code token}.
+   *
    * @param token token form which to extract the {@link Claims}.
+   *
    * @return {@link Claims} object from {@code token}.
    */
   public Claims getClaims(String token) {
@@ -71,7 +76,9 @@ public class JwtService {
 
   /**
    * Get the expiration date from {@code token}.
+   *
    * @param token token from which to extract the expiration date.
+   *
    * @return Expiration date of the {@code token}.
    */
   public Date getExpirationDate(String token) {
@@ -80,7 +87,9 @@ public class JwtService {
 
   /**
    * Check if a {@code token} is expired.
+   *
    * @param token token from which to check if is expired.
+   *
    * @return {@code true} if {@code token} is expired, {@code false} otherwise.
    */
   public boolean isTokenExpired(String token) {
@@ -89,9 +98,11 @@ public class JwtService {
 
   /**
    * Generate a new {@code token}.
+   *
    * @param userId user identifier.
    * @param role user role.
    * @param tokenType type of the {@code token} to generate.
+   *
    * @return new generated {@code token}.
    */
   public String generateToken(String userId, Role role, String tokenType) {

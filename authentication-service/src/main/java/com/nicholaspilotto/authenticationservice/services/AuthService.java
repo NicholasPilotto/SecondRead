@@ -52,7 +52,9 @@ public class AuthService {
 
   /**
    * Get an existing {@link UserVo} by its identifier.
+   *
    * @param id identifier of the {@link UserVo}.
+   *
    * @return {@link UserVo} with {@code id} as identifier.
    */
   public UserVo getUserById(Long id) {

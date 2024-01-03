@@ -13,7 +13,12 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controller class used to manage all {@link AuthenticationResponse}s.
@@ -41,7 +46,7 @@ public class AuthController {
    *
    * @param user {@link UserVo} from which to build the {@link  AuthenticationResponse}.
    *
-   * @return {@link AuthenticationResponse} with {@link UserVo} ACCESS and REFRESH {@code JWT}.
+   * @return {@link AuthenticationResponse} with {@link #user} ACCESS and REFRESH {@code JWT}.
    */
   private AuthenticationResponse createAuthenticationResponse(UserVo user) {
     String accessToken = jwtService.generateToken(
@@ -61,10 +66,11 @@ public class AuthController {
 
   /**
    * Register a new{@link UserVo} into the system.
+   *
    * @param payload new {@link  UserVo} data.
    *
    * @return if the registration was successful, a new instance of {@link AuthenticationResponse},
-   * otherwise, {@code BAD_REQUEST} status.
+   *     otherwise, {@code BAD_REQUEST} status.
    */
   @PostMapping("/register")
   public ResponseEntity<?> register(@RequestBody RegisterRequest payload) {
@@ -84,7 +90,7 @@ public class AuthController {
    *
    * @param payload {@link UserVo} login credentials.
    * @return if the login was successful, a new instance of {@link AuthenticationResponse},
-   * otherwise, {@code BAD_REQUEST} status.
+   *     otherwise, {@code BAD_REQUEST} status.
    */
   @GetMapping("/login")
   public ResponseEntity<?> login(@RequestBody LoginRequest payload) {

@@ -4,6 +4,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+/**
+ * Represents a login request object.
+ */
 public class LoginRequest {
   @Email
   private String email;
@@ -35,9 +38,9 @@ public class LoginRequest {
 
   @Override
   public String toString() {
-    return "LoginRequest{" +
-      "email='" + email + '\'' +
-      ", password='" + password + '\'' +
-      '}';
+    return "LoginRequest{"
+      + "email='" + email + '\''
+      + ", password='" + password + '\''
+      + '}';
   }
 }
