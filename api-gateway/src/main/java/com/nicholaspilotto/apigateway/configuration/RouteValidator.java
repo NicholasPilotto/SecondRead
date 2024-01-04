@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class RouteValidator {
+  /**
+   * List of all open endpoints of {@code Authentication service}.
+   */
   private static final List<String> authenticationOpenEndpoints = List.of(
     "auth/register",
     "auth/login"
