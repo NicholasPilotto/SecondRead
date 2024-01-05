@@ -1,11 +1,12 @@
 package com.nicholaspilotto.userservice.interceptors;
 
-import com.nicholaspilotto.userservice.annotations.RoleAdmin;
+import com.nicholaspilotto.userservice.annotations.AuthorizedRoles;
 import com.nicholaspilotto.userservice.constants.ProjectConstants;
 import com.nicholaspilotto.userservice.models.entities.Role;
 import com.nicholaspilotto.userservice.services.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -42,9 +43,9 @@ public class RoleInterceptor implements HandlerInterceptor {
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
     if (handler instanceof HandlerMethod handlerMethod) {
-      RoleAdmin roleAdmin = handlerMethod.getMethodAnnotation(RoleAdmin.class);
+      AuthorizedRoles authorizedRoles = handlerMethod.getMethodAnnotation(AuthorizedRoles.class);
 
-      if (roleAdmin == null) {
+      if (authorizedRoles == null) {
         return true;
       }
 
@@ -65,7 +66,9 @@ public class RoleInterceptor implements HandlerInterceptor {
           .get(ProjectConstants.Claims.ROLE, String.class)
       )];
 
-      if (token.isBlank() || isExpired || role != Role.ADMIN) {
+      boolean match = Arrays.stream(authorizedRoles.authorized()).anyMatch(r -> r == role);
+
+      if (token.isBlank() || isExpired || !match) {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.getWriter()
                 .write("User not authenticated or not allowed to access to this resource.");
