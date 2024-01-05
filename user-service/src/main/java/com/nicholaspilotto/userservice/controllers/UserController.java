@@ -1,10 +1,12 @@
 package com.nicholaspilotto.userservice.controllers;
 
-import com.nicholaspilotto.userservice.annotations.RoleAdmin;
+import com.nicholaspilotto.userservice.annotations.AuthorizedRoles;
 import com.nicholaspilotto.userservice.models.dtos.user.LoginCredential;
 import com.nicholaspilotto.userservice.models.dtos.user.UserCreationDto;
 import com.nicholaspilotto.userservice.models.dtos.user.UserResponseDto;
 import com.nicholaspilotto.userservice.models.dtos.user.UserUpdateDto;
+import com.nicholaspilotto.userservice.models.dtos.user.errors.ErrorResponse;
+import com.nicholaspilotto.userservice.models.entities.Role;
 import com.nicholaspilotto.userservice.models.entities.User;
 import com.nicholaspilotto.userservice.services.CustomerUserService;
 import com.nicholaspilotto.userservice.utilities.Utility;
@@ -68,7 +70,7 @@ public class UserController {
    * @return List of users.
    */
   @GetMapping()
-  @RoleAdmin
+  @AuthorizedRoles(authorized = { Role.ADMIN, Role.CUSTOMER})
   public ResponseEntity<?> getAllUsers(final Pageable pageable) {
     List<User> users = customerUserService.getAllUsers(pageable).getContent();
     List<UserResponseDto> response = Arrays.stream(mapper.map(users, UserResponseDto[].class)).toList();
@@ -82,7 +84,7 @@ public class UserController {
    * @return Number of user store into the database.
    */
   @GetMapping("/count")
-  @RoleAdmin
+  @AuthorizedRoles(authorized = { Role.ADMIN, Role.CUSTOMER })
   public ResponseEntity<Long> count() {
     Long count = customerUserService.count();
     logger.info("Count has been request. The result is: %s".formatted(count));
@@ -102,7 +104,11 @@ public class UserController {
 
     if (user == null) {
       logger.warn("User with id %s has not been found".formatted(id));
-      return new ResponseEntity<>("User with provided id does not exist.", HttpStatus.NOT_FOUND);
+      ErrorResponse errorResponse = new ErrorResponse(
+        HttpStatus.NOT_FOUND,
+        "User with provided id does not exist."
+      );
+      return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     logger.info("User with id %s has been found.".formatted(id));
@@ -122,7 +128,12 @@ public class UserController {
     User user = customerUserService.getUserByEmail(email).orElse(null);
 
     if (user == null) {
-      return new ResponseEntity<>("User with provided email does not exist", HttpStatus.NOT_FOUND);
+      logger.warn("User with email %s has not been found".formatted(email));
+      ErrorResponse errorResponse = new ErrorResponse(
+        HttpStatus.NOT_FOUND,
+        "User with provided email does not exist."
+      );
+      return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     logger.info("User with email %s has been found".formatted(email));
@@ -144,14 +155,22 @@ public class UserController {
 
     if (user == null) {
       logger.info("Login failed: user %s does not exists.".formatted(credential.getEmail()));
-      return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+      ErrorResponse errorResponse = new ErrorResponse(
+        HttpStatus.NOT_FOUND,
+        "User with provided credentials cannot login."
+      );
+      return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     if (!encoder.matches(credential.getPassword(), user.getPassword())) {
       logger.info("Login failed: wrong password.");
-      return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+      ErrorResponse errorResponse = new ErrorResponse(
+        HttpStatus.NOT_FOUND,
+        "User with provided credentials cannot login."
+      );
+      return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     logger.info("Login successful: %s has logged in.".formatted(credential.getEmail()));
@@ -173,7 +192,11 @@ public class UserController {
 
     if (checkIfExists != null) {
       logger.warn("User with email: %s already exists".formatted(payload.getEmail()));
-      return new ResponseEntity<>("User with this email already exist", HttpStatus.CONFLICT);
+      ErrorResponse errorResponse = new ErrorResponse(
+        HttpStatus.CONFLICT,
+        "User with provided email already exists."
+      );
+      return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
     User newUser = mapper.map(payload, User.class);
@@ -203,10 +226,11 @@ public class UserController {
 
     if (existing == null) {
       logger.warn("User with id %s does not exist. Cannot update it.".formatted(id));
-      return new ResponseEntity<>(
-        "User with provided ID does not exist",
-        HttpStatus.BAD_REQUEST
+      ErrorResponse errorResponse = new ErrorResponse(
+        HttpStatus.BAD_REQUEST,
+        "User with provided ID does not exist."
       );
+      return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     existing = payload.overwrite(existing);
@@ -250,7 +274,11 @@ public class UserController {
 
     if (existing == null) {
       logger.warn("User with id %s does not exist. Cannot delete it,".formatted(id));
-      return new ResponseEntity<>("User with provided ID does not exist", HttpStatus.BAD_REQUEST);
+      ErrorResponse errorResponse = new ErrorResponse(
+        HttpStatus.BAD_REQUEST,
+        "User with provided ID does not exist."
+      );
+      return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     logger.info("User with id %s has been successfully removed".formatted(id));
