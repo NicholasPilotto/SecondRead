@@ -2,6 +2,7 @@ package com.nicholaspilotto.userservice.annotations;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import com.nicholaspilotto.userservice.models.entities.Role;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -12,4 +13,11 @@ import java.lang.annotation.Target;
  */
 @Retention(RUNTIME)
 @Target({ ElementType.METHOD, ElementType.TYPE })
-public @interface RoleAdmin { }
+public @interface AuthorizedRoles {
+  /**
+   * Authorized {@link Role}.
+   *
+   * @return The array of the authorized {@link Role}s.
+   */
+  Role[] authorized();
+}
