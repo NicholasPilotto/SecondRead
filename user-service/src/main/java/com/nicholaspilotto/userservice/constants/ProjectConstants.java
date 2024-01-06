@@ -27,4 +27,14 @@ public class ProjectConstants {
      */
     public static final String ROLE = "role";
   }
+
+  /**
+   * Project {@link String} constants.
+   */
+  public static class StringConstants {
+    /**
+     * Represents an empty {@link String};
+     */
+    public static final String EMPTY = "";
+  }
 }
