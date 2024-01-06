@@ -10,6 +10,13 @@ import org.springframework.web.client.RestTemplate;
  */
 @Configuration(proxyBeanMethods = false)
 public class RestTemplateConfiguration {
+  /**
+   * Build a new instance of {@link RestTemplate} object.
+   *
+   * @param builder {@link RestTemplateBuilder} object reference.
+   *
+   * @return new instance of {@link RestTemplate}.
+   */
   @Bean
   RestTemplate restTemplate(RestTemplateBuilder builder) {
     return builder.build();
