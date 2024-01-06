@@ -51,7 +51,7 @@ public class RoleInterceptor implements HandlerInterceptor {
 
       String token = request
         .getHeader(ProjectConstants.HttpHeaders.AUTHORIZATION)
-        .replace(ProjectConstants.HttpHeaders.BEARER, "");
+        .replace(ProjectConstants.HttpHeaders.BEARER, ProjectConstants.StringConstants.EMPTY);
 
       if (token.isBlank()) {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
