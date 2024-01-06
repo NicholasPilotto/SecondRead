@@ -1,1 +1,15 @@
+spring:
+  application:
+    name: book-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        current_session_context_class: thread
 
+server:
+  port: 8900
