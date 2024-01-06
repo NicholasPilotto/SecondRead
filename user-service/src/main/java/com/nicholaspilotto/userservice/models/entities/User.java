@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -36,6 +37,7 @@ public class User {
   private Date birthDate;
   @Column(name = "phone_number")
   private String phoneNumber;
+  @Email
   private String email;
   @NotNull
   @Size(min = 32, max = 72)
