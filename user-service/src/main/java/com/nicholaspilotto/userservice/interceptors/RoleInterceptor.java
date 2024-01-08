@@ -66,7 +66,7 @@ public class RoleInterceptor implements HandlerInterceptor {
           .get(ProjectConstants.Claims.ROLE, String.class)
       )];
 
-      boolean match = Arrays.stream(authorizedRoles.authorized()).anyMatch(r -> r == role);
+      boolean match = role == Role.ADMIN || Arrays.stream(authorizedRoles.authorized()).anyMatch(r -> r == role);
 
       if (token.isBlank() || isExpired || !match) {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
