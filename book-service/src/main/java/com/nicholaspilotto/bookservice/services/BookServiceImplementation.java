@@ -29,4 +29,9 @@ public class BookServiceImplementation implements BookService {
   public Page<Book> getAllBooks(Pageable pageable) {
     return bookRepository.findAll(pageable);
   }
+
+  @Override
+  public Long count(Pageable pageable) {
+    return getAllBooks(pageable).getTotalElements();
+  }
 }

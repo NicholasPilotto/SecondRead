@@ -16,4 +16,13 @@ public interface BookService {
    * @return The list of all {@link Book} stored, eventually paginated.
    */
   public abstract Page<Book> getAllBooks(Pageable pageable);
+
+  /**
+   * Get the amount of {@link Book}, eventually paginated
+   *
+   * @param pageable {@link Pageable} object of the current result.
+   *
+   * @return The amount of {@link Book}, eventually paginated by {@code pageable} object.
+   */
+  public abstract Long count(Pageable pageable);
 }
