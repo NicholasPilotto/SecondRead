@@ -56,4 +56,17 @@ public class BookController {
     logger.info("Books has been requested.");
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
+
+  /**
+   * Get the total amount of {@link Book}, eventually paginated.
+   *
+   * @param pageable {@link Pageable} of the current result.
+   *
+   * @return Amount of {@link Book}, eventually paginated with {@code pageable}.
+   */
+  @GetMapping("/count")
+  public ResponseEntity<?> count(final Pageable pageable) {
+    Long count = bookService.count(pageable);
+    return new ResponseEntity<>(count, HttpStatus.OK);
+  }
 }
