@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -68,5 +69,26 @@ public class BookController {
   public ResponseEntity<?> count(final Pageable pageable) {
     Long count = bookService.count(pageable);
     return new ResponseEntity<>(count, HttpStatus.OK);
+  }
+
+  /**
+   * Get a particular {@link Book} by its identifier.
+   *
+   * @param id identifier of the desired {@link Book}.
+   *
+   * @return {@link BookResponseDto} that corresponds to {@code id} if exists, otherwise, {@code null}.
+   */
+  @GetMapping("/{id}")
+  public ResponseEntity<?> getById(@PathVariable Long id) {
+    Book book = bookService.getBookById(id).orElse(null);
+
+    if (book == null) {
+      logger.warn("Book with id = %s has not been found.".formatted(id));
+      return new ResponseEntity<>("Book cannot be found", HttpStatus.NOT_FOUND);
+    }
+
+    logger.info("Book with id = %s has been found".formatted(id));
+    BookResponseDto bookResponseDto = mapper.map(book, BookResponseDto.class);
+    return new ResponseEntity<>(bookResponseDto, HttpStatus.OK);
   }
 }
