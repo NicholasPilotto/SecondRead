@@ -3,6 +3,7 @@ package com.nicholaspilotto.bookservice.services;
 import com.nicholaspilotto.bookservice.models.entities.Book;
 import com.nicholaspilotto.bookservice.repositories.BookRepository;
 import com.nicholaspilotto.bookservice.services.interfaces.BookService;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,5 +34,10 @@ public class BookServiceImplementation implements BookService {
   @Override
   public Long count(Pageable pageable) {
     return getAllBooks(pageable).getTotalElements();
+  }
+
+  @Override
+  public Optional<Book> getBookById(Long id) {
+    return bookRepository.findById(id);
   }
 }
