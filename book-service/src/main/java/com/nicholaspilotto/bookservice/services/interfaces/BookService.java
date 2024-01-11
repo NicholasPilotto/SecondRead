@@ -1,6 +1,7 @@
 package com.nicholaspilotto.bookservice.services.interfaces;
 
 import com.nicholaspilotto.bookservice.models.entities.Book;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -25,4 +26,13 @@ public interface BookService {
    * @return The amount of {@link Book}, eventually paginated by {@code pageable} object.
    */
   public abstract Long count(Pageable pageable);
+
+  /**
+   * Get a particular {@link Book} by its identifier.
+   *
+   * @param id identifier of the desired {@link Book}.
+   *
+   * @return {@link Book} that corresponds to {@code id} if exists, otherwise, {@code null}.
+   */
+  public abstract Optional<Book> getBookById(Long id);
 }
