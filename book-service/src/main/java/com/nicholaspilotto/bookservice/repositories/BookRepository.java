@@ -2,6 +2,7 @@ package com.nicholaspilotto.bookservice.repositories;
 
 import com.nicholaspilotto.bookservice.models.entities.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
 
 /**
  * Represents the repository layer for the {@link Book} entity.
