@@ -33,7 +33,7 @@ public class ProjectConstants {
    */
   public static class StringConstants {
     /**
-     * Represents an empty {@link String};
+     * Represents an empty {@link String}.
      */
     public static final String EMPTY = "";
   }
