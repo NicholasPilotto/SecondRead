@@ -4,6 +4,7 @@ import com.nicholaspilotto.userservice.models.entities.User;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 /**
  * Represents the interface class used to interact with generic user data.
@@ -12,11 +13,12 @@ public interface UserService {
   /**
    * Get the list of all users.
    *
-   * @param pageable Page data.
+   * @param pageable {@link Page} data.
+   * @param specification {@link Specification} object.
    *
    * @return List containing all users.
    */
-  public abstract Page<User> getAllUsers(Pageable pageable);
+  public abstract Page<User> getAllUsers(Pageable pageable, Specification<User> specification);
 
   /**
    * Get a specific user by its id.
