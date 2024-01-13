@@ -36,9 +36,9 @@ public class UserFilters implements Filters<User> {
 
   @Override
   public Specification<User> toSpecification() {
-    Specification<User> specification = UserFilterSpecificationBuilder.createSpecification(
+    Specification<User> specification = Specification.where(UserFilterSpecificationBuilder.createSpecification(
       new FiltersSpecification("firstName", QueryOperator.LIKE, firstName, null)
-    );
+    ));
 
     specification.and(
       UserFilterSpecificationBuilder.createSpecification(
@@ -46,11 +46,13 @@ public class UserFilters implements Filters<User> {
       )
     );
 
-    specification.and(
-      UserFilterSpecificationBuilder.createSpecification(
-        new FiltersSpecification("birthday", QueryOperator.EQUALS, birthday.toString(), null)
-      )
-    );
+    if (birthday != null) {
+      specification.and(
+        UserFilterSpecificationBuilder.createSpecification(
+          new FiltersSpecification("birthday", QueryOperator.EQUALS, birthday.toString(), null)
+        )
+      );
+    }
 
     specification.and(
       UserFilterSpecificationBuilder.createSpecification(
