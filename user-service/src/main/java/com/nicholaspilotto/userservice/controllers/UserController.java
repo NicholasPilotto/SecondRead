@@ -1,6 +1,7 @@
 package com.nicholaspilotto.userservice.controllers;
 
 import com.nicholaspilotto.userservice.annotations.AuthorizedRoles;
+import com.nicholaspilotto.userservice.filters.UserFilters;
 import com.nicholaspilotto.userservice.models.dtos.user.LoginCredential;
 import com.nicholaspilotto.userservice.models.dtos.user.UserCreationDto;
 import com.nicholaspilotto.userservice.models.dtos.user.UserResponseDto;
@@ -71,8 +72,9 @@ public class UserController {
    */
   @GetMapping()
   @AuthorizedRoles(authorized = { Role.ADMIN, Role.CUSTOMER})
-  public ResponseEntity<?> getAllUsers(final Pageable pageable) {
-    List<User> users = customerUserService.getAllUsers(pageable).getContent();
+  public ResponseEntity<?> getAllUsers(final Pageable pageable, final UserFilters filters) {
+    List<User> users = customerUserService.getAllUsers(pageable, filters.toSpecification()).getContent();
+
     List<UserResponseDto> response = Arrays.stream(mapper.map(users, UserResponseDto[].class)).toList();
     logger.info("Users has been requested.");
     return new ResponseEntity<>(response, HttpStatus.OK);
