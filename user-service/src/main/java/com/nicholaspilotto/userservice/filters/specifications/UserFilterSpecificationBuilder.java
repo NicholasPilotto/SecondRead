@@ -20,14 +20,8 @@ public class UserFilterSpecificationBuilder {
   public static Specification<User> createSpecification(FiltersSpecification filters) {
     return switch (filters.getOperator()) {
       case EQUALS -> (root, query, criteriaBuilder) ->
-        criteriaBuilder.equal(
-          root.get(filters.getField()),
-          UserFilterSpecificationBuilder.castToRequiredType(
-            root.get(filters.getField())
-                .getJavaType(),
-            filters.getValues()
-          )
-        );
+          criteriaBuilder.equal(root.get(filters.getField()),
+            castToRequiredType(root.get(filters.getField()).getJavaType(), filters.getValue()));
       case NOT_EQ -> (root, query, criteriaBuilder) ->
         criteriaBuilder.notEqual(
           root.get(filters.getField()),
