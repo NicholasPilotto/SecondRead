@@ -1,10 +1,14 @@
 package com.nicholaspilotto.userservice.filters;
 
+import static com.nicholaspilotto.userservice.filters.specifications.UserFilterSpecificationBuilder.createSpecification;
+import static org.springframework.data.jpa.domain.Specification.where;
+
 import com.nicholaspilotto.userservice.filters.interfaces.Filters;
-import com.nicholaspilotto.userservice.filters.specifications.UserFilterSpecificationBuilder;
 import com.nicholaspilotto.userservice.filters.specifications.enums.QueryOperator;
 import com.nicholaspilotto.userservice.models.entities.User;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 
 /**
@@ -13,7 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 public class UserFilters implements Filters<User> {
   private String firstName;
   private String lastName;
-  private Date birthday;
+  private Date birthdate;
   private String phoneNumber;
   private String email;
 
@@ -29,44 +33,50 @@ public class UserFilters implements Filters<User> {
   public UserFilters(String firstName, String lastName, Date birthday, String phoneNumber, String email) {
     this.firstName = firstName;
     this.lastName = lastName;
-    this.birthday = birthday;
+    this.birthdate = birthday;
     this.phoneNumber = phoneNumber;
     this.email = email;
   }
 
   @Override
   public Specification<User> toSpecification() {
-    Specification<User> specification = Specification.where(UserFilterSpecificationBuilder.createSpecification(
-      new FiltersSpecification("firstName", QueryOperator.LIKE, firstName, null)
-    ));
+    List<FiltersSpecification> filtersSpecification = new ArrayList<>();
 
-    specification.and(
-      UserFilterSpecificationBuilder.createSpecification(
-        new FiltersSpecification("lastName", QueryOperator.LIKE, lastName, null)
-      )
-    );
+    if (firstName != null) {
+      filtersSpecification.add(new FiltersSpecification("firstName", QueryOperator.LIKE, firstName, null));
+    }
 
-    if (birthday != null) {
-      specification.and(
-        UserFilterSpecificationBuilder.createSpecification(
-          new FiltersSpecification("birthday", QueryOperator.EQUALS, birthday.toString(), null)
-        )
+    if (lastName != null) {
+      filtersSpecification.add(new FiltersSpecification("lastName", QueryOperator.LIKE, lastName, null));
+    }
+
+    if (birthdate != null) {
+      filtersSpecification.add(
+        new FiltersSpecification("birthdate", QueryOperator.EQUALS, birthdate.toString(), null)
       );
     }
 
-    specification.and(
-      UserFilterSpecificationBuilder.createSpecification(
-        new FiltersSpecification("phoneNumber", QueryOperator.LIKE, phoneNumber, null)
-      )
-    );
+    if (phoneNumber != null) {
+      filtersSpecification.add(
+        new FiltersSpecification("phoneNumber", QueryOperator.EQUALS, phoneNumber, null)
+      );
+    }
 
-    specification.and(
-      UserFilterSpecificationBuilder.createSpecification(
-        new FiltersSpecification("email", QueryOperator.LIKE, email, null)
-      )
-    );
+    if (email != null) {
+      filtersSpecification.add(
+        new FiltersSpecification("email", QueryOperator.EQUALS, email, null)
+      );
+    }
 
-    return specification;
+    if (!filtersSpecification.isEmpty()) {
+      Specification<User> specification = where(createSpecification(filtersSpecification.remove(0)));
+      for (FiltersSpecification input : filtersSpecification) {
+        specification = specification.and(createSpecification(input));
+      }
+      return specification;
+    }
+
+    return null;
   }
 
   public String getFirstName() {
@@ -85,12 +95,12 @@ public class UserFilters implements Filters<User> {
     this.lastName = lastName;
   }
 
-  public Date getBirthday() {
-    return birthday;
+  public Date getBirthdate() {
+    return birthdate;
   }
 
-  public void setBirthday(Date birthday) {
-    this.birthday = birthday;
+  public void setBirthdate(Date birthdate) {
+    this.birthdate = birthdate;
   }
 
   public String getPhoneNumber() {
