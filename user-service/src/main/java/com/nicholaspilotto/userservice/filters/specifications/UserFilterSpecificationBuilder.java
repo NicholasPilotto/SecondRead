@@ -2,6 +2,7 @@ package com.nicholaspilotto.userservice.filters.specifications;
 
 import com.nicholaspilotto.userservice.filters.FiltersSpecification;
 import com.nicholaspilotto.userservice.models.entities.User;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
@@ -20,8 +21,8 @@ public class UserFilterSpecificationBuilder {
   public static Specification<User> createSpecification(FiltersSpecification filters) {
     return switch (filters.getOperator()) {
       case EQUALS -> (root, query, criteriaBuilder) ->
-          criteriaBuilder.equal(root.get(filters.getField()),
-            castToRequiredType(root.get(filters.getField()).getJavaType(), filters.getValue()));
+          criteriaBuilder.equal(root.get(filters.getField()), filters.getValue());
+
       case NOT_EQ -> (root, query, criteriaBuilder) ->
         criteriaBuilder.notEqual(
           root.get(filters.getField()),
@@ -42,10 +43,18 @@ public class UserFilterSpecificationBuilder {
         );
       case LIKE -> (root, query, criteriaBuilder) ->
         criteriaBuilder.like(root.get(filters.getField()), "%" + filters.getValue() + "%");
+
       case IN -> (root, query, criteriaBuilder) ->
         criteriaBuilder.in(root.get(filters.getField()))
                        .value(castToRequiredType(root.get(filters.getField())
                                                      .getJavaType(), filters.getValues()));
+
+      case EQUALS_DATE -> (root, query, criteriaBuilder) ->
+        criteriaBuilder.equal(
+          root.get(filters.getField()),
+          new SimpleDateFormat("yyyy-MM-dd").format(filters.getValue())
+        );
+
       default -> throw new RuntimeException("Operation not supported yet");
     };
   }
