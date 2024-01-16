@@ -6,10 +6,13 @@ import static org.springframework.data.jpa.domain.Specification.where;
 import com.nicholaspilotto.userservice.filters.interfaces.Filters;
 import com.nicholaspilotto.userservice.filters.specifications.enums.QueryOperator;
 import com.nicholaspilotto.userservice.models.entities.User;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * Represents a filter object for {@link User} model.
@@ -17,6 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 public class UserFilters implements Filters<User> {
   private String firstName;
   private String lastName;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   private Date birthdate;
   private String phoneNumber;
   private String email;
@@ -51,8 +55,14 @@ public class UserFilters implements Filters<User> {
     }
 
     if (birthdate != null) {
+      DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
       filtersSpecification.add(
-        new FiltersSpecification("birthdate", QueryOperator.EQUALS, birthdate.toString(), null)
+        new FiltersSpecification(
+          "birthDate",
+          QueryOperator.EQUALS_DATE, formatter.format(birthdate),
+          null
+        )
       );
     }
 
