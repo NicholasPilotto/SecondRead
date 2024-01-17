@@ -43,7 +43,7 @@ public class UserFilters implements Filters<User> {
   }
 
   @Override
-  public Specification<User> toSpecification() {
+  public Specification<User> toPredicate() {
     List<FiltersSpecification> filtersSpecification = new ArrayList<>();
 
     if (firstName != null) {
@@ -55,7 +55,7 @@ public class UserFilters implements Filters<User> {
     }
 
     if (birthdate != null) {
-      DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+      DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
       filtersSpecification.add(
         new FiltersSpecification(
