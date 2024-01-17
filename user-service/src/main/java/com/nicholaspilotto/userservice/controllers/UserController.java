@@ -73,7 +73,7 @@ public class UserController {
   @GetMapping()
   @AuthorizedRoles(authorized = { Role.ADMIN, Role.CUSTOMER})
   public ResponseEntity<?> getAllUsers(final Pageable pageable, final UserFilters filters) {
-    List<User> users = customerUserService.getAllUsers(pageable, filters.toSpecification()).getContent();
+    List<User> users = customerUserService.getAllUsers(pageable, filters.toPredicate()).getContent();
 
     List<UserResponseDto> response = Arrays.stream(mapper.map(users, UserResponseDto[].class)).toList();
     logger.info("Users has been requested.");
