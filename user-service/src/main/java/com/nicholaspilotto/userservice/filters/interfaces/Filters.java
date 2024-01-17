@@ -8,5 +8,10 @@ import org.springframework.data.jpa.domain.Specification;
  * @param <T> object of the {@link Specification}.
  */
 public interface Filters<T> {
-  public abstract Specification<T> toSpecification();
+  /**
+   * Creates a new {@link Specification} based on filter.
+   *
+   * @return {@link Specification} on filter.
+   */
+  public abstract Specification<T> toPredicate();
 }
