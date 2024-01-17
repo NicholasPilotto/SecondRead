@@ -2,8 +2,11 @@ package com.nicholaspilotto.userservice.filters.specifications;
 
 import com.nicholaspilotto.userservice.filters.FiltersSpecification;
 import com.nicholaspilotto.userservice.models.entities.User;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -24,23 +27,14 @@ public class UserFilterSpecificationBuilder {
           criteriaBuilder.equal(root.get(filters.getField()), filters.getValue());
 
       case NOT_EQ -> (root, query, criteriaBuilder) ->
-        criteriaBuilder.notEqual(
-          root.get(filters.getField()),
-          castToRequiredType(root.get(filters.getField())
-                                 .getJavaType(), filters.getValue())
-        );
+        criteriaBuilder.notEqual(root.get(filters.getField()), filters.getValue());
+
       case GREATER_THAN -> (root, query, criteriaBuilder) ->
-        criteriaBuilder.gt(
-          root.get(filters.getField()),
-          (Number) castToRequiredType(root.get(filters.getField())
-                                          .getJavaType(), filters.getValue())
-        );
+        criteriaBuilder.greaterThan(root.get(filters.getField()), filters.getValue());
+
       case LESS_THAN -> (root, query, criteriaBuilder) ->
-        criteriaBuilder.lt(
-          root.get(filters.getField()),
-          (Number) castToRequiredType(root.get(filters.getField())
-                                          .getJavaType(), filters.getValue())
-        );
+        criteriaBuilder.lessThan(root.get(filters.getField()), filters.getValue());
+
       case LIKE -> (root, query, criteriaBuilder) ->
         criteriaBuilder.like(root.get(filters.getField()), "%" + filters.getValue() + "%");
 
@@ -50,12 +44,18 @@ public class UserFilterSpecificationBuilder {
                                                      .getJavaType(), filters.getValues()));
 
       case EQUALS_DATE -> (root, query, criteriaBuilder) ->
-        criteriaBuilder.equal(
-          root.get(filters.getField()),
-          new SimpleDateFormat("yyyy-MM-dd").format(filters.getValue())
-        );
+        criteriaBuilder.equal(root.get(filters.getField()), stringToDate(filters.getValue()));
 
-      default -> throw new RuntimeException("Operation not supported yet");
+      case GREATER_DATE -> (root, query, criteriaBuilder) ->
+        criteriaBuilder.greaterThan(root.get(filters.getField()), stringToDate(filters.getValue()));
+
+      case LESS_DATE -> (root, query, criteriaBuilder) ->
+        criteriaBuilder.lessThan(root.get(filters.getField()), stringToDate(filters.getValue()));
+
+      case BETWEEN_DATE -> (root, query, criteriaBuilder) -> {
+        List<Date> dates = separateDate(filters.getValue());
+        return criteriaBuilder.between(root.get(filters.getField()), dates.get(0), dates.get(1));
+      };
     };
   }
 
@@ -77,5 +77,37 @@ public class UserFilterSpecificationBuilder {
       lists.add(castToRequiredType(fieldType, s));
     }
     return lists;
+  }
+
+  /**
+   * Creates a new {@link Date} object from a {@link String}.
+   *
+   * @param dateString {@link String} from which to build new date.
+   *
+   * @return Created {@link Date} object.
+   */
+  private static Date stringToDate(String dateString) {
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+    try {
+      return formatter.parse(dateString);
+    } catch (ParseException exception) {
+      return null;
+    }
+  }
+
+  /**
+   * Creates an array of {@link Date} from a string containing dates separated by {@code ;}.
+   *   {@code 1999-08-25;2024-01-17} is mapped as {@code 1999-08-25, 2024-01-17}.
+   *
+   * @param dates {@link String} containing dates.
+   *
+   * @return {@link List} of {@link Date}.
+   *
+   */
+  private static List<Date> separateDate(String dates) {
+    return Arrays.stream(dates.split(";"))
+                 .map(UserFilterSpecificationBuilder::stringToDate)
+                 .toList();
   }
 }
