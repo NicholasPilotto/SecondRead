@@ -51,9 +51,11 @@ public interface UserService {
    * Calculate the count of the users stored into
    * the database.
    *
+   * @param specification {@link Specification} object.
+   *
    * @return Number of user store into the database.
    */
-  public abstract long count();
+  public abstract long count(Specification<User> specification);
 
   /**
    * Update user data.
