@@ -87,8 +87,8 @@ public class UserController {
    */
   @GetMapping("/count")
   @AuthorizedRoles(authorized = { Role.ADMIN, Role.CUSTOMER })
-  public ResponseEntity<Long> count() {
-    Long count = customerUserService.count();
+  public ResponseEntity<Long> count(final UserFilters filters) {
+    Long count = customerUserService.count(filters.toPredicate());
     logger.info("Count has been request. The result is: %s".formatted(count));
     return new ResponseEntity<>(count, HttpStatus.OK);
   }
