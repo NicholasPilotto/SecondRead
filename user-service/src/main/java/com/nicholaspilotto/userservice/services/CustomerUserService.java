@@ -41,8 +41,8 @@ public class CustomerUserService implements UserService {
   }
 
   @Override
-  public long count() {
-    return userRepository.count();
+  public long count(Specification<User> specification) {
+    return userRepository.count(specification);
   }
 
   @Override
