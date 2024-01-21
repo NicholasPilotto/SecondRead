@@ -1,8 +1,28 @@
 use reqwest::Client;
 
+use std::env;
+
+struct Configuration {
+  url: String,
+}
+
 #[tokio::main]
 async fn main() {
+  read_configuration();
   make_request().await;
+}
+
+fn read_configuration() -> Configuration {
+  let key = "URL";
+  let mut conf: Configuration = Configuration { url: String::new() };
+
+  match env::var(key) {
+    Ok(val) => conf.url = val,
+    Err(e) => println!("couldn't interpret {}: {}", key, e),
+  }
+
+  println!("{}", conf.url);
+  return conf;
 }
 
 async fn make_request() {
