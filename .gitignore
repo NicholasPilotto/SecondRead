@@ -156,4 +156,7 @@ fabric.properties
 **/application-dev.yaml
 **/application-dev.yml
 
+# VsCode
+.vscode/
+
 # End of https://mrkandreev.name/snippets/gitignore-generator/#Java,macOS,Maven,Intellij,VisualStudioCode
