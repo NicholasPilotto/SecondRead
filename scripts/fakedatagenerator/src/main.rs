@@ -1,8 +1,7 @@
 use reqwest::Client;
-
 use std::env;
 
-struct Configuration {
+pub struct Configuration {
   url: String,
 }
 
@@ -21,12 +20,13 @@ fn read_configuration() -> Configuration {
     Err(e) => println!("couldn't interpret {}: {}", key, e),
   }
 
-  println!("{}", conf.url);
   return conf;
 }
 
 async fn make_request() {
-  let url: &str = "https://www.httpbin.org/get";
+  let conf: Configuration = read_configuration();
+
+  let url: &str = &conf.url;
 
   let client: Client = Client::new();
   let result: Result<reqwest::Response, reqwest::Error> = client.get(url).send().await;
