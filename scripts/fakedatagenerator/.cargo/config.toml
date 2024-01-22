@@ -1,2 +1,2 @@
 [env]
-URL = "test"
+URL = "http://localhost:8765"
