@@ -1,13 +1,14 @@
+use chrono::{TimeZone, Utc};
 use fake::faker::internet::en::FreeEmail;
-use fake::faker::lorem::en::Word;
 use fake::faker::name::en::FirstName;
 use fake::faker::name::en::LastName;
 use fake::faker::phone_number::en::CellNumber;
 use fake::Fake;
+use rand::distributions::Alphanumeric;
 use reqwest::Client;
 use std::env;
 use std::io;
-
+use rand::Rng;
 pub struct Configuration {
   url: String,
 }
@@ -59,13 +60,23 @@ async fn make_request(n_requests: i32) {
   let mut i = 0;
   while i < n_requests {
 
+    let num = rand::thread_rng().gen_range(5000000..1000000000);
+
+    let timestamp = Utc::now().timestamp() - num;
+
+    let pass: String = rand::thread_rng()
+    .sample_iter(&Alphanumeric)
+    .take(15)
+    .map(char::from)
+    .collect();
+
     let user: User = User {
       firstName: FirstName().fake(),
       lastName: LastName().fake(),
-      birthDate: Date().fake(),
+      birthDate: Utc.timestamp_opt(timestamp as i64, 0).unwrap().date_naive().to_string(),
       phoneNumber: CellNumber().fake(),
       email: FreeEmail().fake(),
-      password: Word().fake(),
+      password: pass,
       role: 3,
     };
 
