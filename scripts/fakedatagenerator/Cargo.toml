@@ -12,3 +12,5 @@ tokio = { version = "1.35.1", features = ["full"] } # for our async runtime
 fake = { version = "2.9.2", features = ["derive"] }
 serde = { version = "1.0.195", features = ["derive"] }
 serde_json = { version = "1.0.111"}
+rand = "0.8"
+chrono = "0.4.32"
