@@ -1,13 +1,8 @@
 package com.nicholaspilotto.userservice.utilities;
 
-import com.github.javafaker.Faker;
-import com.nicholaspilotto.userservice.models.entities.User;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import org.mindrot.jbcrypt.BCrypt;
 
 /**
