@@ -246,25 +246,6 @@ public class UserController {
   }
 
   /**
-   * Generate fake user data and store the into the database.
-   *
-   * @param number number of fake user to generate.
-   * @return The list of fake user generated.
-   */
-  @PostMapping("/generate-fake-data/{number}")
-  public ResponseEntity<?> generateFakeData(@PathVariable int number) {
-    List<User> fakeUsers = Utility.generateFakeUsers(number);
-    List<User> result = new ArrayList<>();
-
-    for (User fakeUser : fakeUsers) {
-      result.add(customerUserService.createUser(fakeUser));
-    }
-
-    logger.info("%s fake users have been created".formatted(number));
-    return new ResponseEntity<>(result, HttpStatus.OK);
-  }
-
-  /**
    * Method to delete user data from the database.
    *
    * @param id ID of the target user.
