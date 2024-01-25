@@ -4,5 +4,10 @@
   "cSpell.words": [
     "dotenv",
     "reqwest"
+  ],
+  "rust-analyzer.linkedProjects": [
+    "./fakedatagenerator/Cargo.toml",
+    "./fakedatagenerator/Cargo.toml",
+    "./fakedatagenerator/Cargo.toml"
   ]
 }
