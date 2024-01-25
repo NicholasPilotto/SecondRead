@@ -56,13 +56,6 @@
 			<version>3.2.0</version>
 		</dependency>
 
-		<!-- GENERATE FAKE DATA -->
-		<dependency>
-			<groupId>com.github.javafaker</groupId>
-			<artifactId>javafaker</artifactId>
-			<version>1.0.2</version>
-		</dependency>
-
 		<!--	SWAGGER	-->
 		<dependency>
 			<groupId>org.springdoc</groupId>
