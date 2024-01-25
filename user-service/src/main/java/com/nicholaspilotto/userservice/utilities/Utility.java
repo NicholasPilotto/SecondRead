@@ -53,36 +53,4 @@ public final class Utility {
 
     return BCrypt.hashpw(input, BCrypt.gensalt());
   }
-
-  /**
-   * Generate {@code number} fake {@link User}s.
-   *
-   * @param number number of fake {@link User}s.
-   *
-   * @return {@code List<User>} of {@code number} {@link User}s.
-   */
-  public static List<User> generateFakeUsers(int number) {
-    List<User> result = new ArrayList<>();
-    Faker faker = new Faker(Locale.ITALIAN);
-
-    for (int i = 0; i < number; ++i) {
-      User user = new User();
-      user.setFirstName(faker.name().firstName());
-      user.setLastName(faker.name().lastName());
-      user.setPhoneNumber(faker.phoneNumber().cellPhone());
-
-      String email = "%s.%s.%d@test.com".formatted(
-        user.getFirstName().toLowerCase(),
-        user.getLastName().toLowerCase(),
-        i
-      );
-
-      user.setEmail(email);
-      user.setPassword(bcrypt(faker.internet().password()));
-      user.setBirthDate(faker.date().birthday(18, 70));
-      result.add(user);
-    }
-
-    return result;
-  }
 }
