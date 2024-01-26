@@ -1,7 +1,8 @@
 package com.nicholaspilotto.bookservice.controllers;
 
+import com.nicholaspilotto.bookservice.models.dtos.BookCreationDto;
+import com.nicholaspilotto.bookservice.models.dtos.BookResponseDto;
 import com.nicholaspilotto.bookservice.models.entities.Book;
-import com.nicholaspilotto.bookservice.models.entities.dtos.BookResponseDto;
 import com.nicholaspilotto.bookservice.services.BookServiceImplementation;
 import java.util.Arrays;
 import java.util.List;
@@ -12,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 /**
@@ -90,5 +88,29 @@ public class BookController {
     logger.info("Book with id = %s has been found".formatted(id));
     BookResponseDto bookResponseDto = mapper.map(book, BookResponseDto.class);
     return new ResponseEntity<>(bookResponseDto, HttpStatus.OK);
+  }
+
+  /**
+   * Create a new {@link Book}.
+   * @param payload new {@link Book} data.
+   *
+   * @return created {@link BookResponseDto} data.
+   */
+  @PostMapping()
+  public ResponseEntity<?> create(@RequestBody BookCreationDto payload) {
+    Book check = bookService.getBookByIsbn(payload.getIsbn()).orElse(null);
+
+    if (check != null) {
+      logger.warn("Book with ISBN: %s already exists".formatted(payload.getIsbn()));
+      return new ResponseEntity<>("Book with provided ISBN already exists", HttpStatus.CONFLICT);
+    }
+
+    Book newBook = mapper.map(payload, Book.class);
+    newBook = bookService.createBook(newBook);
+
+    BookResponseDto dto = mapper.map(newBook, BookResponseDto.class);
+    logger.info("Book with ISBN: %s has been successfully created.".formatted(payload.getIsbn()));
+
+    return new ResponseEntity<>(dto, HttpStatus.OK);
   }
 }
