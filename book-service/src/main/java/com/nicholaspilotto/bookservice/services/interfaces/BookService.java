@@ -19,7 +19,7 @@ public interface BookService {
   public abstract Page<Book> getAllBooks(Pageable pageable);
 
   /**
-   * Get the amount of {@link Book}, eventually paginated
+   * Get the amount of {@link Book}, eventually paginated.
    *
    * @param pageable {@link Pageable} object of the current result.
    *
@@ -35,4 +35,22 @@ public interface BookService {
    * @return {@link Book} that corresponds to {@code id} if exists, otherwise, {@code null}.
    */
   public abstract Optional<Book> getBookById(Long id);
+
+  /**
+   * Get a particular {@link Book} by ISBN code.
+   *
+   * @param isbn code of the desired {@link Book}.
+   *
+   * @return {@link Book} that corresponds to {@code ISBN} if exists, otherwise, {@code null}.
+   */
+  public abstract Optional<Book> getBookByIsbn(String isbn);
+
+  /**
+   * Create a new {@link Book}.
+   *
+   * @param book new {@link Book} data.
+   *
+   * @return Created {@link Book} data.
+   */
+  public abstract Book createBook(Book book);
 }

@@ -40,4 +40,13 @@ public class BookServiceImplementation implements BookService {
   public Optional<Book> getBookById(Long id) {
     return bookRepository.findById(id);
   }
+
+  public Optional<Book> getBookByIsbn(String isbn) {
+    return bookRepository.findByIsbn(isbn);
+  }
+
+  @Override
+  public Book createBook(Book book) {
+    return bookRepository.save(book);
+  }
 }
