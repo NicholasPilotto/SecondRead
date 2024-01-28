@@ -263,6 +263,8 @@ public class UserController {
       return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    customerUserService.delete(existing);
+
     logger.info("User with id %s has been successfully removed".formatted(id));
     return new ResponseEntity<>("User has been deleted successfully", HttpStatus.OK);
   }
