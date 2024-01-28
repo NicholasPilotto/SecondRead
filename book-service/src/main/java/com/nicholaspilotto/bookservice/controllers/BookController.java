@@ -13,13 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 
 /**
  * Controller class for {@link Book} entity.
@@ -118,5 +118,27 @@ public class BookController {
     logger.info("Book with ISBN: %s has been successfully created.".formatted(payload.getIsbn()));
 
     return new ResponseEntity<>(dto, HttpStatus.OK);
+  }
+
+  /**
+   * Delete an existing {@link Book}.
+   *
+   * @param isbn isbn of the book which to delete.
+   *
+   * @return {@code HTTP status: 200} if the book has been deleted, otherwise, {@code error HTTP status}.
+   */
+  @DeleteMapping("/{isbn}")
+  public ResponseEntity<?> delete(@PathVariable String isbn) {
+    Book check = bookService.getBookByIsbn(isbn).orElse(null);
+
+    if (check == null) {
+      logger.warn("Book with ISBN: %s does not exist".formatted(isbn));
+      return new ResponseEntity<>("Book with provided ISBN does not exist", HttpStatus.BAD_REQUEST);
+    }
+
+    bookService.delete(check);
+
+    logger.info("Book with ISBN: %s has been successfully deleted.".formatted(isbn));
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 }
