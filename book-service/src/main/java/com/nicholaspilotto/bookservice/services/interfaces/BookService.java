@@ -53,4 +53,12 @@ public interface BookService {
    * @return Created {@link Book} data.
    */
   public abstract Book createBook(Book book);
+
+  /**
+   * Delete an existing {@link Book}.
+   *
+   * @param existing existing {@link Book} entity.
+   *
+   */
+  public abstract void delete(Book existing);
 }
