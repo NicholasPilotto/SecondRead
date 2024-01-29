@@ -55,6 +55,15 @@ public interface BookService {
   public abstract Book createBook(Book book);
 
   /**
+   * Update an existing {@link Book}.
+   *
+   * @param book new book data.
+   *
+   * @return updated book data.
+   */
+  public Book update(Book book);
+
+  /**
    * Delete an existing {@link Book}.
    *
    * @param existing existing {@link Book} entity.
