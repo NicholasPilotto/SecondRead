@@ -1,7 +1,7 @@
 package com.nicholaspilotto.bookservice.controllers;
 
 import com.nicholaspilotto.bookservice.models.dtos.BookCreationDto;
-import com.nicholaspilotto.bookservice.models.dtos.BookResponseDto;
+import com.nicholaspilotto.bookservice.models.dtos.BookDto;
 import com.nicholaspilotto.bookservice.models.entities.Book;
 import com.nicholaspilotto.bookservice.services.BookServiceImplementation;
 import java.util.Arrays;
@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,7 +57,7 @@ public class BookController {
   @GetMapping()
   public ResponseEntity<?> getAllBooks(final Pageable pageable) {
     List<Book> books = this.bookService.getAllBooks(pageable).getContent();
-    List<BookResponseDto> response = Arrays.stream(mapper.map(books, BookResponseDto[].class)).toList();
+    List<BookDto> response = Arrays.stream(mapper.map(books, BookDto[].class)).toList();
     logger.info("Books has been requested.");
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
@@ -79,7 +80,7 @@ public class BookController {
    *
    * @param id identifier of the desired {@link Book}.
    *
-   * @return {@link BookResponseDto} that corresponds to {@code id} if exists, otherwise, {@code null}.
+   * @return {@link BookDto} that corresponds to {@code id} if exists, otherwise, {@code null}.
    */
   @GetMapping("/{id}")
   public ResponseEntity<?> getById(@PathVariable Long id) {
@@ -91,7 +92,7 @@ public class BookController {
     }
 
     logger.info("Book with id = %s has been found".formatted(id));
-    BookResponseDto bookResponseDto = mapper.map(book, BookResponseDto.class);
+    BookDto bookResponseDto = mapper.map(book, BookDto.class);
     return new ResponseEntity<>(bookResponseDto, HttpStatus.OK);
   }
 
@@ -100,7 +101,7 @@ public class BookController {
    *
    * @param payload new {@link Book} data.
    *
-   * @return created {@link BookResponseDto} data.
+   * @return created {@link BookDto} data.
    */
   @PostMapping()
   public ResponseEntity<?> create(@RequestBody BookCreationDto payload) {
@@ -114,10 +115,41 @@ public class BookController {
     Book newBook = mapper.map(payload, Book.class);
     newBook = bookService.createBook(newBook);
 
-    BookResponseDto dto = mapper.map(newBook, BookResponseDto.class);
+    BookDto dto = mapper.map(newBook, BookDto.class);
     logger.info("Book with ISBN: %s has been successfully created.".formatted(payload.getIsbn()));
 
     return new ResponseEntity<>(dto, HttpStatus.OK);
+  }
+
+  /**
+   * Update and existing {@link Book}.
+   *
+   * @param id identifier of the book to update.
+   * @param payload new book data
+   *
+   * @return updated book.
+   */
+  @PatchMapping("/{id}")
+  public ResponseEntity<?> update(
+    @PathVariable Long id,
+    @RequestBody BookDto payload
+  ) {
+    Book check = bookService.getBookById(id).orElse(null);
+
+    if (check == null) {
+      logger.warn("Book with id: %s does not exist.".formatted(id));
+      return new ResponseEntity<>("Book with id: %s does not exist.".formatted(id), HttpStatus.BAD_REQUEST);
+    }
+
+    check = payload.overwrite(check);
+
+    check = bookService.update(check);
+
+    BookDto response = mapper.map(check, BookDto.class);
+
+    logger.info("Book with id: %s has been updated".formatted(id));
+
+    return  new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   /**
