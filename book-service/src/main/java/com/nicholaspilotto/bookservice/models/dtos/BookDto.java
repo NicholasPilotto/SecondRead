@@ -1,7 +1,6 @@
 package com.nicholaspilotto.bookservice.models.dtos;
 
 import com.nicholaspilotto.bookservice.models.entities.Book;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -13,7 +12,7 @@ public class BookDto {
   private Long id;
   private String isbn;
   private String title;
-  private int pageNumber;
+  private Integer pageNumber;
   private BigDecimal price;
   private LocalDateTime pubDate;
   private LocalDateTime createdAt;
@@ -115,7 +114,31 @@ public class BookDto {
     this.updatedAt = updatedAt;
   }
 
+  /**
+   * Overwrite existing {@link Book} with current dto.
+   *
+   * @param existing entity data.
+   *
+   * @return existing entity overwritten with current dto data.
+   */
   public Book overwrite(Book existing) {
+    if (this.isbn == null) {
+      this.isbn = existing.getIsbn();
+    }
+
+    if (this.title == null) {
+      this.title = existing.getTitle();
+    }
+    if (this.pageNumber == null) {
+      this.pageNumber = existing.getPageNumber();
+    }
+    if (this.price == null) {
+      this.price = existing.getPrice();
+    }
+    if (this.pubDate == null) {
+      this.pubDate = existing.getPubDate();
+    }
+
     return existing;
   }
 
@@ -128,7 +151,7 @@ public class BookDto {
       return false;
     }
     BookDto that = (BookDto) o;
-    return pageNumber == that.pageNumber && Objects.equals(id, that.id) && Objects.equals(
+    return Objects.equals(pageNumber, that.pageNumber) && Objects.equals(id, that.id) && Objects.equals(
       isbn,
       that.isbn
     ) && Objects.equals(title, that.title) && Objects.equals(
