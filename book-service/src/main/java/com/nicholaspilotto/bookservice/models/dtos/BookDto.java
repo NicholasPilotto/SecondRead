@@ -1,5 +1,7 @@
 package com.nicholaspilotto.bookservice.models.dtos;
 
+import com.nicholaspilotto.bookservice.models.entities.Book;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -7,7 +9,7 @@ import java.util.Objects;
 /**
  * Represents a book response dto.
  */
-public class BookResponseDto {
+public class BookDto {
   private Long id;
   private String isbn;
   private String title;
@@ -18,7 +20,7 @@ public class BookResponseDto {
   private LocalDateTime updatedAt;
 
   /**
-   * Initializes a new instance of {@link BookResponseDto}.
+   * Initializes a new instance of {@link BookDto}.
    *
    * @param id book identifier.
    * @param isbn book isbn code.
@@ -29,7 +31,7 @@ public class BookResponseDto {
    * @param createdAt book creation date.
    * @param updatedAt book date of the last update.
    */
-  public BookResponseDto(
+  public BookDto(
     Long id,
     String isbn,
     String title,
@@ -113,6 +115,10 @@ public class BookResponseDto {
     this.updatedAt = updatedAt;
   }
 
+  public Book overwrite(Book existing) {
+    return existing;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -121,7 +127,7 @@ public class BookResponseDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BookResponseDto that = (BookResponseDto) o;
+    BookDto that = (BookDto) o;
     return pageNumber == that.pageNumber && Objects.equals(id, that.id) && Objects.equals(
       isbn,
       that.isbn
