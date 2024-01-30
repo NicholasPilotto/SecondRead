@@ -2,6 +2,7 @@ package com.nicholaspilotto.bookservice.controllers;
 
 import com.nicholaspilotto.bookservice.models.dtos.BookCreationDto;
 import com.nicholaspilotto.bookservice.models.dtos.BookDto;
+import com.nicholaspilotto.bookservice.models.dtos.errors.ErrorResponse;
 import com.nicholaspilotto.bookservice.models.entities.Book;
 import com.nicholaspilotto.bookservice.services.BookServiceImplementation;
 import java.util.Arrays;
@@ -87,8 +88,12 @@ public class BookController {
     Book book = bookService.getBookById(id).orElse(null);
 
     if (book == null) {
+      ErrorResponse errorResponse = new ErrorResponse(
+        HttpStatus.NOT_FOUND,
+        "Book with id = %s has not been found.".formatted(id)
+      );
       logger.warn("Book with id = %s has not been found.".formatted(id));
-      return new ResponseEntity<>("Book cannot be found", HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     logger.info("Book with id = %s has been found".formatted(id));
@@ -108,8 +113,12 @@ public class BookController {
     Book check = bookService.getBookByIsbn(payload.getIsbn()).orElse(null);
 
     if (check != null) {
+      ErrorResponse errorResponse = new ErrorResponse(
+        HttpStatus.CONFLICT,
+        "Book with ISBN: %s already exists".formatted(payload.getIsbn())
+      );
       logger.warn("Book with ISBN: %s already exists".formatted(payload.getIsbn()));
-      return new ResponseEntity<>("Book with provided ISBN already exists", HttpStatus.CONFLICT);
+      return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
     Book newBook = mapper.map(payload, Book.class);
@@ -137,8 +146,12 @@ public class BookController {
     Book check = bookService.getBookById(id).orElse(null);
 
     if (check == null) {
+      ErrorResponse errorResponse = new ErrorResponse(
+        HttpStatus.BAD_REQUEST,
+        "Book with id: %s does not exist.".formatted(id)
+      );
       logger.warn("Book with id: %s does not exist.".formatted(id));
-      return new ResponseEntity<>("Book with id: %s does not exist.".formatted(id), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     check = payload.overwrite(check);
@@ -164,8 +177,12 @@ public class BookController {
     Book check = bookService.getBookByIsbn(isbn).orElse(null);
 
     if (check == null) {
+      ErrorResponse errorResponse = new ErrorResponse(
+        HttpStatus.BAD_REQUEST,
+        "Book with ISBN: %s does not exist".formatted(isbn)
+      );
       logger.warn("Book with ISBN: %s does not exist".formatted(isbn));
-      return new ResponseEntity<>("Book with provided ISBN does not exist", HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     bookService.delete(check);
