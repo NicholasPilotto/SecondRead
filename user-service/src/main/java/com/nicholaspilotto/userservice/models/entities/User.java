@@ -43,7 +43,7 @@ public class User {
   @Size(min = 32, max = 72)
   private String password;
   @Enumerated(EnumType.ORDINAL)
-  Role role;
+  private Role role;
   @Column(name = "created_at")
   @CreationTimestamp
   private LocalDateTime createdAt;
