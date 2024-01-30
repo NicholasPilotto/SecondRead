@@ -1,11 +1,7 @@
 package com.nicholaspilotto.bookservice.models.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.nicholaspilotto.bookservice.models.Enums.BookGenre;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -48,6 +44,9 @@ public class Book {
   @NotNull
   private LocalDateTime pubDate;
 
+  @Enumerated(EnumType.ORDINAL)
+  private BookGenre genre;
+
   @Column(name = "created_at")
   @CreationTimestamp
   private LocalDateTime createdAt;
@@ -55,6 +54,8 @@ public class Book {
   @Column(name = "updated_at")
   @UpdateTimestamp
   private LocalDateTime updatedAt;
+
+
 
   /**
    * Initializes a new instance of {@link Book}.
@@ -65,6 +66,7 @@ public class Book {
    * @param pageNumber book number of pages.
    * @param price book price.
    * @param pubDate book publication date.
+   * @param genre book genre.
    * @param createdAt book creation date.
    * @param updatedAt book date of the last update.
    */
@@ -75,6 +77,7 @@ public class Book {
     int pageNumber,
     BigDecimal price,
     LocalDateTime pubDate,
+    BookGenre genre,
     LocalDateTime createdAt,
     LocalDateTime updatedAt
   ) {
@@ -84,6 +87,7 @@ public class Book {
     this.pageNumber = pageNumber;
     this.price = price;
     this.pubDate = pubDate;
+    this.genre = genre;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -136,6 +140,14 @@ public class Book {
     this.pubDate = pubDate;
   }
 
+  public BookGenre getGenre() {
+    return genre;
+  }
+
+  public void setGenre(BookGenre genre) {
+    this.genre = genre;
+  }
+
   public LocalDateTime getCreatedAt() {
     return createdAt;
   }
@@ -153,32 +165,6 @@ public class Book {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Book book = (Book) o;
-    return pageNumber == book.pageNumber && Objects.equals(id, book.id) && Objects.equals(
-      isbn,
-      book.isbn
-    ) && Objects.equals(title, book.title) && Objects.equals(
-      price,
-      book.price
-    ) && Objects.equals(pubDate, book.pubDate) && Objects.equals(
-      createdAt,
-      book.createdAt
-    ) && Objects.equals(updatedAt, book.updatedAt);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, isbn, title, pageNumber, price, pubDate, createdAt, updatedAt);
-  }
-
-  @Override
   public String toString() {
     return "Book{"
       + "id=" + id
@@ -187,6 +173,7 @@ public class Book {
       + ", pageNumber=" + pageNumber
       + ", price=" + price
       + ", pubDate=" + pubDate
+      + ", genre=" + genre
       + ", createdAt=" + createdAt
       + ", updatedAt=" + updatedAt
       + '}';
