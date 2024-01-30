@@ -1,4 +1,4 @@
-package com.nicholaspilotto.bookservice.models.Enums;
+package com.nicholaspilotto.bookservice.models.enums;
 
 /**
  * Represents all genre that a {@link com.nicholaspilotto.bookservice.models.entities.Book} can be.
