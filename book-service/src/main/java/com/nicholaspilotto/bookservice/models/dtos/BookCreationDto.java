@@ -1,18 +1,19 @@
 package com.nicholaspilotto.bookservice.models.dtos;
 
+import com.nicholaspilotto.bookservice.models.enums.BookGenre;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * Dto used to create a new book.
  */
 public class BookCreationDto {
-  @Size(min = 13, max = 13)
+  @Size(min = 10)
   private String isbn;
 
   @Size(min = 1, max = 200)
@@ -28,7 +29,10 @@ public class BookCreationDto {
   private BigDecimal price;
 
   @NotNull
-  private LocalDateTime pubDate;
+  private Date pubDate;
+
+  @NotNull
+  private BookGenre genre;
 
   /**
    * Creates a new instance of {@link BookCreationDto} class.
@@ -38,13 +42,22 @@ public class BookCreationDto {
    * @param pageNumber book number of pages.
    * @param price book price.
    * @param pubDate book publication date.
+   * @param genre book genre.
    */
-  public BookCreationDto(String isbn, String title, int pageNumber, BigDecimal price, LocalDateTime pubDate) {
+  public BookCreationDto(
+    String isbn,
+    String title,
+    int pageNumber,
+    BigDecimal price,
+    Date pubDate,
+    BookGenre genre
+  ) {
     this.isbn = isbn;
     this.title = title;
     this.pageNumber = pageNumber;
     this.price = price;
     this.pubDate = pubDate;
+    this.genre = genre;
   }
 
   public String getIsbn() {
@@ -79,12 +92,20 @@ public class BookCreationDto {
     this.price = price;
   }
 
-  public LocalDateTime getPubDate() {
+  public Date getPubDate() {
     return pubDate;
   }
 
-  public void setPubDate(LocalDateTime pubDate) {
+  public void setPubDate(Date pubDate) {
     this.pubDate = pubDate;
+  }
+
+  public BookGenre getGenre() {
+    return genre;
+  }
+
+  public void setGenre(BookGenre genre) {
+    this.genre = genre;
   }
 
   /**
@@ -100,6 +121,7 @@ public class BookCreationDto {
       + ", pageNumber=" + pageNumber
       + ", price=" + price
       + ", pubDate=" + pubDate
+      + ", genre=" + genre
       + '}';
   }
 }

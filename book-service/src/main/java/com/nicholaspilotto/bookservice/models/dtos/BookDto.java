@@ -3,6 +3,7 @@ package com.nicholaspilotto.bookservice.models.dtos;
 import com.nicholaspilotto.bookservice.models.entities.Book;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -14,7 +15,7 @@ public class BookDto {
   private String title;
   private Integer pageNumber;
   private BigDecimal price;
-  private LocalDateTime pubDate;
+  private Date pubDate;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 
@@ -36,7 +37,7 @@ public class BookDto {
     String title,
     int pageNumber,
     BigDecimal price,
-    LocalDateTime pubDate,
+    Date pubDate,
     LocalDateTime createdAt,
     LocalDateTime updatedAt
   ) {
@@ -90,11 +91,11 @@ public class BookDto {
     this.price = price;
   }
 
-  public LocalDateTime getPubDate() {
+  public Date getPubDate() {
     return pubDate;
   }
 
-  public void setPubDate(LocalDateTime pubDate) {
+  public void setPubDate(Date pubDate) {
     this.pubDate = pubDate;
   }
 
@@ -112,6 +113,12 @@ public class BookDto {
 
   public void setUpdatedAt(LocalDateTime updatedAt) {
     this.updatedAt = updatedAt;
+  }
+
+  /**
+   * {@link BookDto} default constructor.
+   */
+  public BookDto() {
   }
 
   /**

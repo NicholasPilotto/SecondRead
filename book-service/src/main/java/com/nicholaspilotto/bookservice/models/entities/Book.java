@@ -16,6 +16,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -30,7 +31,7 @@ public class Book {
   private Long id;
 
   @Column(unique = true)
-  @Size(min = 13, max = 13)
+  @Size(min = 10)
   private String isbn;
 
   @Size(min = 1, max = 200)
@@ -48,7 +49,7 @@ public class Book {
 
   @Column(name = "pub_date")
   @NotNull
-  private LocalDateTime pubDate;
+  private Date pubDate;
 
   @Enumerated(EnumType.ORDINAL)
   private BookGenre genre;
@@ -61,7 +62,10 @@ public class Book {
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
-
+  /**
+   * {@link Book} default constructor.
+   */
+  public Book() { }
 
   /**
    * Initializes a new instance of {@link Book}.
@@ -82,7 +86,7 @@ public class Book {
     String title,
     int pageNumber,
     BigDecimal price,
-    LocalDateTime pubDate,
+    Date pubDate,
     BookGenre genre,
     LocalDateTime createdAt,
     LocalDateTime updatedAt
@@ -138,11 +142,11 @@ public class Book {
     this.price = price;
   }
 
-  public LocalDateTime getPubDate() {
+  public Date getPubDate() {
     return pubDate;
   }
 
-  public void setPubDate(LocalDateTime pubDate) {
+  public void setPubDate(Date pubDate) {
     this.pubDate = pubDate;
   }
 
