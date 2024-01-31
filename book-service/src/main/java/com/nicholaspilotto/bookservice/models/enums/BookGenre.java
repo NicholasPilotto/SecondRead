@@ -100,4 +100,9 @@ public enum BookGenre {
    * Humor book.
    */
   Humor,
+
+  /**
+   * Fiction book.
+   */
+  Fiction,
 }
