@@ -144,6 +144,16 @@ public class UserController {
   }
 
   /**
+   * Ping pong method. This method responds only if the service is up.
+   *
+   * @return if the service is up, it responds with {@code pong}.
+   */
+  @GetMapping("/ping")
+  public ResponseEntity<?> pong() {
+    return new ResponseEntity<>("pong", HttpStatus.OK);
+  }
+
+  /**
    * Login {@link User} into the system.
    *
    * @param credential {@link User} credential, such as {@code email} and {@code password}.
