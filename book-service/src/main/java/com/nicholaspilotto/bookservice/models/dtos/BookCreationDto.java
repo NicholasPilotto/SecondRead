@@ -14,6 +14,7 @@ import java.util.Date;
  */
 public class BookCreationDto {
   @Size(min = 10)
+  @NotEmpty
   private String isbn;
 
   @Size(min = 1, max = 200)
