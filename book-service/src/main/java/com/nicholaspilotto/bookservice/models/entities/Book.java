@@ -9,6 +9,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -49,6 +51,7 @@ public class Book {
 
   @Column(name = "pub_date")
   @NotNull
+  @Temporal(TemporalType.DATE)
   private Date pubDate;
 
   @Enumerated(EnumType.ORDINAL)
