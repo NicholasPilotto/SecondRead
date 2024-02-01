@@ -1,6 +1,7 @@
 package com.nicholaspilotto.bookservice.models.dtos;
 
 import com.nicholaspilotto.bookservice.models.entities.Book;
+import com.nicholaspilotto.bookservice.models.enums.BookGenre;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -16,6 +17,7 @@ public class BookDto {
   private Integer pageNumber;
   private BigDecimal price;
   private Date pubDate;
+  private BookGenre genre;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 
@@ -28,6 +30,7 @@ public class BookDto {
    * @param pageNumber book number of pages.
    * @param price book price.
    * @param pubDate book publication date.
+   * @param genre book genre.
    * @param createdAt book creation date.
    * @param updatedAt book date of the last update.
    */
@@ -38,6 +41,7 @@ public class BookDto {
     int pageNumber,
     BigDecimal price,
     Date pubDate,
+    BookGenre genre,
     LocalDateTime createdAt,
     LocalDateTime updatedAt
   ) {
@@ -47,8 +51,15 @@ public class BookDto {
     this.pageNumber = pageNumber;
     this.price = price;
     this.pubDate = pubDate;
+    this.genre = genre;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+  }
+
+  /**
+   * {@link BookDto} default constructor.
+   */
+  public BookDto() {
   }
 
   public Long getId() {
@@ -75,11 +86,11 @@ public class BookDto {
     this.title = title;
   }
 
-  public int getPageNumber() {
+  public Integer getPageNumber() {
     return pageNumber;
   }
 
-  public void setPageNumber(int pageNumber) {
+  public void setPageNumber(Integer pageNumber) {
     this.pageNumber = pageNumber;
   }
 
@@ -99,6 +110,14 @@ public class BookDto {
     this.pubDate = pubDate;
   }
 
+  public BookGenre getGenre() {
+    return genre;
+  }
+
+  public void setGenre(BookGenre genre) {
+    this.genre = genre;
+  }
+
   public LocalDateTime getCreatedAt() {
     return createdAt;
   }
@@ -113,12 +132,6 @@ public class BookDto {
 
   public void setUpdatedAt(LocalDateTime updatedAt) {
     this.updatedAt = updatedAt;
-  }
-
-  /**
-   * {@link BookDto} default constructor.
-   */
-  public BookDto() {
   }
 
   /**
