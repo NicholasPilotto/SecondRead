@@ -2,11 +2,12 @@ package com.nicholaspilotto.userservice.controllers;
 
 import com.nicholaspilotto.userservice.annotations.AuthorizedRoles;
 import com.nicholaspilotto.userservice.filters.UserFilters;
+import com.nicholaspilotto.userservice.models.dtos.errors.ErrorResponse;
+import com.nicholaspilotto.userservice.models.dtos.status.PongDto;
 import com.nicholaspilotto.userservice.models.dtos.user.LoginCredential;
 import com.nicholaspilotto.userservice.models.dtos.user.UserCreationDto;
 import com.nicholaspilotto.userservice.models.dtos.user.UserResponseDto;
 import com.nicholaspilotto.userservice.models.dtos.user.UserUpdateDto;
-import com.nicholaspilotto.userservice.models.dtos.user.errors.ErrorResponse;
 import com.nicholaspilotto.userservice.models.entities.Role;
 import com.nicholaspilotto.userservice.models.entities.User;
 import com.nicholaspilotto.userservice.services.CustomerUserService;
@@ -150,7 +151,7 @@ public class UserController {
    */
   @GetMapping("/ping")
   public ResponseEntity<?> pong() {
-    return new ResponseEntity<>("pong", HttpStatus.OK);
+    return new ResponseEntity<>(new PongDto(), HttpStatus.OK);
   }
 
   /**
