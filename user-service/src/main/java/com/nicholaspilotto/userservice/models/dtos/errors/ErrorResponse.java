@@ -1,4 +1,4 @@
-package com.nicholaspilotto.userservice.models.dtos.user.errors;
+package com.nicholaspilotto.userservice.models.dtos.errors;
 
 import org.springframework.http.HttpStatus;
 
