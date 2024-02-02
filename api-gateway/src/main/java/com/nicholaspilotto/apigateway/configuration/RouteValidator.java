@@ -18,7 +18,8 @@ public class RouteValidator {
    */
   private static final List<String> authenticationOpenEndpoints = List.of(
     "auth/register",
-    "auth/login"
+    "auth/login",
+    "/ping"
   );
 
   /**
