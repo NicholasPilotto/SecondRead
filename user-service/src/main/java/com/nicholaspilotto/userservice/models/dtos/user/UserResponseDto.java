@@ -15,6 +15,7 @@ public class UserResponseDto {
   private String phoneNumber;
   private String email;
   private Role role;
+  private LocalDateTime lastLoginAt;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 
@@ -30,6 +31,7 @@ public class UserResponseDto {
    * @param phoneNumber user phone number.
    * @param email user email.
    * @param role user role.
+   * @param lastLoginAt last user login timestamp.
    * @param createdAt user account date creation.
    * @param updatedAt date of the last update of the account.
    */
@@ -41,6 +43,7 @@ public class UserResponseDto {
     String phoneNumber,
     String email,
     Role role,
+    LocalDateTime lastLoginAt,
     LocalDateTime createdAt,
     LocalDateTime updatedAt
   ) {
@@ -51,6 +54,7 @@ public class UserResponseDto {
     this.phoneNumber = phoneNumber;
     this.email = email;
     this.role = role;
+    this.lastLoginAt = lastLoginAt;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -111,6 +115,14 @@ public class UserResponseDto {
     this.role = role;
   }
 
+  public LocalDateTime getLastLoginAt() {
+    return lastLoginAt;
+  }
+
+  public void setLastLoginAt(LocalDateTime lastLoginAt) {
+    this.lastLoginAt = lastLoginAt;
+  }
+
   public LocalDateTime getCreatedAt() {
     return createdAt;
   }
@@ -137,6 +149,7 @@ public class UserResponseDto {
       + ", phoneNumber='" + phoneNumber + '\''
       + ", email='" + email + '\''
       + ", role=" + role
+      + ", lastLoginAt=" + lastLoginAt
       + ", createdAt=" + createdAt
       + ", updatedAt=" + updatedAt
       + '}';

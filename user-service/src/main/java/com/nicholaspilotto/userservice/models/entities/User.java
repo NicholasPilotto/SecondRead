@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.CurrentTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
@@ -44,6 +45,10 @@ public class User {
   private String password;
   @Enumerated(EnumType.ORDINAL)
   private Role role;
+
+  @Column(name = "last_login_at")
+  private LocalDateTime lastLoginAt;
+
   @Column(name = "created_at")
   @CreationTimestamp
   private LocalDateTime createdAt;
@@ -64,6 +69,7 @@ public class User {
    * @param phoneNumber phone number of the user.
    * @param password password of the user.
    * @param role role of the user.
+   * @param lastLoginAt last user login timestamp.
    * @param createdAt date of creation.
    * @param updatedAt last update date.
    */
@@ -76,6 +82,7 @@ public class User {
     String phoneNumber,
     String password,
     Role role,
+    LocalDateTime lastLoginAt,
     LocalDateTime createdAt,
     LocalDateTime updatedAt
   ) {
@@ -87,6 +94,7 @@ public class User {
     this.phoneNumber = phoneNumber;
     this.password = password;
     this.role = role;
+    this.lastLoginAt = lastLoginAt;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -227,6 +235,24 @@ public class User {
   }
 
   /**
+   * Get the last user login timestamp.
+   *
+   * @return last user login timestamp.
+   */
+  public LocalDateTime getLastLoginAt() {
+    return lastLoginAt;
+  }
+
+  /**
+   * Set the last user login timestamp.
+   *
+   * @param lastLoginAt last user login timestamp.
+   */
+  public void setLastLoginAt(LocalDateTime lastLoginAt) {
+    this.lastLoginAt = lastLoginAt;
+  }
+
+  /**
    * Gets the creation date of the user.
    */
   public LocalDateTime getCreatedAt() {
@@ -285,7 +311,19 @@ public class User {
    */
   @Override
   public int hashCode() {
-    return Objects.hash(id, firstName, lastName, birthDate, phoneNumber, email, password, role, createdAt, updatedAt);
+    return Objects.hash(
+      id,
+      firstName,
+      lastName,
+      birthDate,
+      phoneNumber,
+      email,
+      password,
+      role,
+      lastLoginAt,
+      createdAt,
+      updatedAt
+    );
   }
 
   /**
@@ -304,6 +342,7 @@ public class User {
       + ", email='" + email + '\''
       + ", password='" + password + '\''
       + ", role=" + role
+      + ", lastLoginAt=" + lastLoginAt
       + ", createdAt=" + createdAt
       + ", updatedAt=" + updatedAt
       + '}';
