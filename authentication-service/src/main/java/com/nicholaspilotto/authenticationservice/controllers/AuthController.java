@@ -92,7 +92,7 @@ public class AuthController {
    * @return if the login was successful, a new instance of {@link AuthenticationResponse},
    *     otherwise, {@code BAD_REQUEST} status.
    */
-  @GetMapping("/login")
+  @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody LoginRequest payload) {
     UserVo user = authService.login(payload);
 
