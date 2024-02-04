@@ -1,6 +1,5 @@
 package com.nicholaspilotto.authenticationservice.models;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -15,8 +14,10 @@ public class UserVo {
   private String phoneNumber;
   private String email;
   private Role role;
-  private LocalDateTime createdAt;
-  private LocalDateTime updatedAt;
+
+  private Date lastLoginAt;
+  private Date createdAt;
+  private Date updatedAt;
 
   public UserVo() { }
 
@@ -30,6 +31,7 @@ public class UserVo {
    * @param phoneNumber user phone number.
    * @param email user email address.
    * @param role user {@link Role}.
+   * @param lastLoginAt last user login.
    * @param createdAt user account creation date.
    * @param updatedAt last user account update date.
    */
@@ -41,8 +43,9 @@ public class UserVo {
     String phoneNumber,
     String email,
     Role role,
-    LocalDateTime createdAt,
-    LocalDateTime updatedAt
+    Date lastLoginAt,
+    Date createdAt,
+    Date updatedAt
   ) {
     this.id = id;
     this.firstName = firstName;
@@ -51,6 +54,7 @@ public class UserVo {
     this.phoneNumber = phoneNumber;
     this.email = email;
     this.role = role;
+    this.lastLoginAt = lastLoginAt;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -111,19 +115,27 @@ public class UserVo {
     this.role = role;
   }
 
-  public LocalDateTime getCreatedAt() {
+  public Date getLastLoginAt() {
+    return lastLoginAt;
+  }
+
+  public void setLastLoginAt(Date lastLoginAt) {
+    this.lastLoginAt = lastLoginAt;
+  }
+
+  public Date getCreatedAt() {
     return createdAt;
   }
 
-  public void setCreatedAt(LocalDateTime createdAt) {
+  public void setCreatedAt(Date createdAt) {
     this.createdAt = createdAt;
   }
 
-  public LocalDateTime getUpdatedAt() {
+  public Date getUpdatedAt() {
     return updatedAt;
   }
 
-  public void setUpdatedAt(LocalDateTime updatedAt) {
+  public void setUpdatedAt(Date updatedAt) {
     this.updatedAt = updatedAt;
   }
 
@@ -145,7 +157,8 @@ public class UserVo {
     ) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(
       email,
       user.email
-    ) && role == user.role && Objects.equals(createdAt, user.createdAt) && Objects.equals(
+    ) && role == user.role && Objects.equals(createdAt, user.createdAt)
+      && Objects.equals(lastLoginAt, user.lastLoginAt) && Objects.equals(
       updatedAt,
       user.updatedAt
     );
@@ -153,7 +166,18 @@ public class UserVo {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, firstName, lastName, birthDate, phoneNumber, email, role, createdAt, updatedAt);
+    return Objects.hash(
+      id,
+      firstName,
+      lastName,
+      birthDate,
+      phoneNumber,
+      email,
+      role,
+      lastLoginAt,
+      createdAt,
+      updatedAt
+    );
   }
 
   @Override
@@ -166,6 +190,7 @@ public class UserVo {
       + ", phoneNumber='" + phoneNumber + '\''
       + ", email='" + email + '\''
       + ", role=" + role
+      + ", lastLoginAt=" + lastLoginAt
       + ", createdAt=" + createdAt
       + ", updatedAt=" + updatedAt
       + '}';
