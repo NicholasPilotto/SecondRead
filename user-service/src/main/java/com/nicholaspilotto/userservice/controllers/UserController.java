@@ -15,6 +15,7 @@ import com.nicholaspilotto.userservice.utilities.Utility;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import org.modelmapper.ModelMapper;
@@ -76,7 +77,7 @@ public class UserController {
     List<User> users = customerUserService.getAllUsers(pageable, filters.toPredicate()).getContent();
 
     List<UserResponseDto> response = Arrays.stream(mapper.map(users, UserResponseDto[].class)).toList();
-    logger.info("Users has been requested.");
+    logger.info("Users have been requested.");
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
@@ -184,6 +185,9 @@ public class UserController {
       );
       return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
+
+    user.setLastLoginAt(LocalDateTime.now());
+    user = customerUserService.update(user);
 
     logger.info("Login successful: %s has logged in.".formatted(credential.getEmail()));
 
