@@ -102,6 +102,16 @@ public class BookController {
   }
 
   /**
+   * Ping pong request.
+   * 
+   * @return if the service is up, the response will be {@code pong}.
+   */
+  @GetMapping("/ping")
+  public ResponseEntity<?> ping() {
+    return new ResponseEntity<>("pong", HttpStatus.OK);
+  }
+
+  /**
    * Create a new {@link Book}.
    *
    * @param payload new {@link Book} data.
