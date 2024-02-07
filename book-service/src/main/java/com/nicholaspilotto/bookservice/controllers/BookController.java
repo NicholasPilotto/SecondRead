@@ -3,6 +3,7 @@ package com.nicholaspilotto.bookservice.controllers;
 import com.nicholaspilotto.bookservice.models.dtos.BookCreationDto;
 import com.nicholaspilotto.bookservice.models.dtos.BookDto;
 import com.nicholaspilotto.bookservice.models.dtos.errors.ErrorResponse;
+import com.nicholaspilotto.bookservice.models.dtos.status.PongDto;
 import com.nicholaspilotto.bookservice.models.entities.Book;
 import com.nicholaspilotto.bookservice.services.BookServiceImplementation;
 import java.util.Arrays;
@@ -103,12 +104,12 @@ public class BookController {
 
   /**
    * Ping pong request.
-   * 
+   *
    * @return if the service is up, the response will be {@code pong}.
    */
   @GetMapping("/ping")
   public ResponseEntity<?> ping() {
-    return new ResponseEntity<>("pong", HttpStatus.OK);
+    return new ResponseEntity<>(new PongDto(), HttpStatus.OK);
   }
 
   /**
