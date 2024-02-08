@@ -13,5 +13,5 @@ public interface Filters<T> {
    *
    * @return {@link Specification} on filter.
    */
-  public abstract Specification<T> toPredicate();
+  Specification<T> toPredicate();
 }
