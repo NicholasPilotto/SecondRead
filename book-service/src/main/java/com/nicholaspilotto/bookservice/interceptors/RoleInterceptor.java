@@ -6,12 +6,11 @@ import com.nicholaspilotto.bookservice.models.roles.Role;
 import com.nicholaspilotto.bookservice.services.jwt.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
-
-import java.util.Arrays;
 
 /**
  * Interceptor class used to filter request based on {@code User} roles.

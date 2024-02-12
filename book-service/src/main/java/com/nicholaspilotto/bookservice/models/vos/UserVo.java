@@ -1,7 +1,6 @@
 package com.nicholaspilotto.bookservice.models.vos;
 
 import com.nicholaspilotto.bookservice.models.roles.Role;
-
 import java.util.Date;
 import java.util.Objects;
 
