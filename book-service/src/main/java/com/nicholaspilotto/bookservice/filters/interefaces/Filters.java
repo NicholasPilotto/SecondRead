@@ -1,4 +1,4 @@
-package com.nicholaspilotto.bookservice.filters;
+package com.nicholaspilotto.bookservice.filters.interefaces;
 
 import org.springframework.data.jpa.domain.Specification;
 
