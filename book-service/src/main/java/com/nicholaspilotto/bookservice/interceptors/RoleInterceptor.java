@@ -1,5 +1,6 @@
 package com.nicholaspilotto.bookservice.interceptors;
 
+import com.nicholaspilotto.bookservice.annotation.AllowAnonymous;
 import com.nicholaspilotto.bookservice.annotation.AuthorizedRoles;
 import com.nicholaspilotto.bookservice.constants.ProjectConstants;
 import com.nicholaspilotto.bookservice.models.roles.Role;
@@ -44,8 +45,9 @@ public class RoleInterceptor implements HandlerInterceptor {
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
     if (handler instanceof HandlerMethod handlerMethod) {
       AuthorizedRoles authorizedRoles = handlerMethod.getMethodAnnotation(AuthorizedRoles.class);
+      AllowAnonymous allowAnonymous = handlerMethod.getMethodAnnotation(AllowAnonymous.class);
 
-      if (authorizedRoles == null) {
+      if (allowAnonymous != null) {
         return true;
       }
 
