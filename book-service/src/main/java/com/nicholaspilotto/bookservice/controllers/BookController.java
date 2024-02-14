@@ -1,10 +1,13 @@
 package com.nicholaspilotto.bookservice.controllers;
 
+import com.nicholaspilotto.bookservice.annotation.AllowAnonymous;
+import com.nicholaspilotto.bookservice.annotation.AuthorizedRoles;
 import com.nicholaspilotto.bookservice.models.dtos.BookCreationDto;
 import com.nicholaspilotto.bookservice.models.dtos.BookDto;
 import com.nicholaspilotto.bookservice.models.dtos.errors.ErrorResponse;
 import com.nicholaspilotto.bookservice.models.dtos.status.PongDto;
 import com.nicholaspilotto.bookservice.models.entities.Book;
+import com.nicholaspilotto.bookservice.models.roles.Role;
 import com.nicholaspilotto.bookservice.services.BookServiceImplementation;
 import java.util.Arrays;
 import java.util.List;
@@ -57,6 +60,7 @@ public class BookController {
    * @return The list of all {@link Book}, eventually paginated.
    */
   @GetMapping()
+  @AllowAnonymous
   public ResponseEntity<?> getAllBooks(final Pageable pageable) {
     List<Book> books = this.bookService.getAllBooks(pageable).getContent();
     List<BookDto> response = Arrays.stream(mapper.map(books, BookDto[].class)).toList();
@@ -85,6 +89,7 @@ public class BookController {
    * @return {@link BookDto} that corresponds to {@code id} if exists, otherwise, {@code null}.
    */
   @GetMapping("/{id}")
+  @AuthorizedRoles(authorized = { Role.CUSTOMER, Role.EMPLOYEE, Role.OWNER })
   public ResponseEntity<?> getById(@PathVariable Long id) {
     Book book = bookService.getBookById(id).orElse(null);
 
