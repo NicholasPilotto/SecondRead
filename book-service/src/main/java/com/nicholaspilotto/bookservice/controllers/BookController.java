@@ -2,6 +2,7 @@ package com.nicholaspilotto.bookservice.controllers;
 
 import com.nicholaspilotto.bookservice.annotation.AllowAnonymous;
 import com.nicholaspilotto.bookservice.annotation.AuthorizedRoles;
+import com.nicholaspilotto.bookservice.filters.BookFilters;
 import com.nicholaspilotto.bookservice.models.dtos.BookCreationDto;
 import com.nicholaspilotto.bookservice.models.dtos.BookDto;
 import com.nicholaspilotto.bookservice.models.dtos.errors.ErrorResponse;
@@ -61,7 +62,7 @@ public class BookController {
    */
   @GetMapping()
   @AllowAnonymous
-  public ResponseEntity<?> getAllBooks(final Pageable pageable) {
+  public ResponseEntity<?> getAllBooks(final Pageable pageable, final BookFilters filters) {
     List<Book> books = this.bookService.getAllBooks(pageable).getContent();
     List<BookDto> response = Arrays.stream(mapper.map(books, BookDto[].class)).toList();
     logger.info("Books has been requested.");
