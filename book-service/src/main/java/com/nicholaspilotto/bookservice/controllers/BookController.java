@@ -61,7 +61,7 @@ public class BookController {
    * @return The list of all {@link Book}, eventually paginated.
    */
   @GetMapping()
-  @AllowAnonymous
+  @AuthorizedRoles(authorized = { Role.CUSTOMER, Role.ADMIN, Role.EMPLOYEE, Role.OWNER })
   public ResponseEntity<?> getAllBooks(final Pageable pageable, final BookFilters filters) {
     List<Book> books = this.bookService.getAllBooks(pageable).getContent();
     List<BookDto> response = Arrays.stream(mapper.map(books, BookDto[].class)).toList();
@@ -77,6 +77,7 @@ public class BookController {
    * @return Amount of {@link Book}, eventually paginated with {@code pageable}.
    */
   @GetMapping("/count")
+  @AuthorizedRoles(authorized = { Role.CUSTOMER, Role.ADMIN, Role.EMPLOYEE, Role.OWNER })
   public ResponseEntity<?> count(final Pageable pageable) {
     Long count = bookService.count(pageable);
     return new ResponseEntity<>(count, HttpStatus.OK);
@@ -90,7 +91,7 @@ public class BookController {
    * @return {@link BookDto} that corresponds to {@code id} if exists, otherwise, {@code null}.
    */
   @GetMapping("/{id}")
-  @AuthorizedRoles(authorized = { Role.CUSTOMER, Role.EMPLOYEE, Role.OWNER })
+  @AuthorizedRoles(authorized = { Role.CUSTOMER, Role.ADMIN, Role.EMPLOYEE, Role.OWNER })
   public ResponseEntity<?> getById(@PathVariable Long id) {
     Book book = bookService.getBookById(id).orElse(null);
 
@@ -114,6 +115,7 @@ public class BookController {
    * @return if the service is up, the response will be {@code pong}.
    */
   @GetMapping("/ping")
+  @AllowAnonymous
   public ResponseEntity<?> ping() {
     return new ResponseEntity<>(new PongDto(), HttpStatus.OK);
   }
@@ -126,6 +128,7 @@ public class BookController {
    * @return created {@link BookDto} data.
    */
   @PostMapping()
+  @AuthorizedRoles(authorized = { Role.ADMIN, Role.OWNER })
   public ResponseEntity<?> create(@RequestBody BookCreationDto payload) {
     Book check = bookService.getBookByIsbn(payload.getIsbn()).orElse(null);
 
@@ -156,6 +159,7 @@ public class BookController {
    * @return updated book.
    */
   @PatchMapping("/{id}")
+  @AuthorizedRoles(authorized = { Role.ADMIN, Role.OWNER })
   public ResponseEntity<?> update(
     @PathVariable Long id,
     @RequestBody BookDto payload
@@ -190,6 +194,7 @@ public class BookController {
    * @return {@code HTTP status: 200} if the book has been deleted, otherwise, {@code error HTTP status}.
    */
   @DeleteMapping("/{isbn}")
+  @AuthorizedRoles(authorized = { Role.ADMIN })
   public ResponseEntity<?> delete(@PathVariable String isbn) {
     Book check = bookService.getBookByIsbn(isbn).orElse(null);
 
