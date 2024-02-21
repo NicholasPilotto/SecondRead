@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { Home } from "./_root/pages";
 import AuthLayout from './_auth/AuthLayout';
 import LogInForm from "./_auth/forms/LogInForm";
-import SignInForm from "./_auth/forms/SignInForm";
+import RegistrationForm from './_auth/forms/RegistrationForm';
 import RootLayout from './_root/RootLayout';
 
 
@@ -13,8 +13,8 @@ function App() {
       <Routes>
         {/* public */}
         <Route element={<AuthLayout />} >
-          <Route path="/sign-in" element={<SignInForm />} />
-          <Route path="/log-in" element={<LogInForm />} />
+          <Route path="/sign-in" element={<RegistrationForm />} />
+          <Route path="/login" element={<LogInForm />} />
         </Route>
 
         {/* private */}
