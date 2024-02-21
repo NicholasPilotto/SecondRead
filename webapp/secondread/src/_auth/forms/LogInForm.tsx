@@ -4,22 +4,18 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { LoginValidationSchema } from '@/lib/validation';
 
 const LogInForm = () => {
-  const formSchema = z.object({
-    email: z.string().email(),
-    password: z.string(),
-  });
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof LoginValidationSchema>>({
+    resolver: zodResolver(LoginValidationSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof LoginValidationSchema>) {
     console.log(values);
   }
   
@@ -37,6 +33,7 @@ const LogInForm = () => {
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-5 w-full mt-4">
+          {/* EMAIL ADDRESS */}
           <FormField
             control={form.control}
             name="email"
@@ -51,6 +48,7 @@ const LogInForm = () => {
             )}
           />
 
+          {/* PASSWORD */}
           <FormField
             control={form.control}
             name="password"
