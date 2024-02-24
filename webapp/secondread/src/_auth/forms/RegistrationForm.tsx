@@ -7,6 +7,7 @@ import { RegistrationValidationSchema } from "@/lib/validation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Loader from "@/components/shared/Loader";
+import { createUser } from "@/services/api";
 
 const RegistrationForm = () => {
   const isLoading: boolean = false;
@@ -21,8 +22,8 @@ const RegistrationForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof RegistrationValidationSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof RegistrationValidationSchema>) {
+    const user = await createUser(values);
   }
 
   return (
