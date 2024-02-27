@@ -8,7 +8,7 @@ export class User extends IModel<User> {
   public email: string = '';
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public deserialize(input: any): IModel<User> {
+  public deserialize(input: any): User {
     this.firstName = input?.firstName;
     this.lastName = input?.lastName;
     this.birthDate = input?.birthDate;
