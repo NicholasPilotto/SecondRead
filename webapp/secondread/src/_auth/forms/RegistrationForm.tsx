@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Loader from "@/components/shared/Loader";
 import { createUser } from "@/services/api";
+import { User } from "@/models/user.model";
 
 const RegistrationForm = () => {
   const isLoading: boolean = false;
@@ -23,7 +25,11 @@ const RegistrationForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof RegistrationValidationSchema>) {
-    const user = await createUser(values);
+    const user: User | null = await createUser(new User().deserialize(values));
+    
+    if (!_.isNil(user)) {
+      console.log('logged');
+    }
   }
 
   return (
